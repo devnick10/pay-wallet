@@ -1,4 +1,4 @@
-export { Provider } from "react-redux";
+export { Provider as StateProvider } from "react-redux";
 export { default as store } from "./store/store";
 export { useBalance } from "./hooks/useBalance";
 export type { RootState, AppDispatch } from "./store/store";

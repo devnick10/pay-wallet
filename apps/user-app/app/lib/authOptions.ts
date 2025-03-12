@@ -16,7 +16,7 @@ declare module "next-auth" {
     }
 }
 
-export const authOpions = {
+export const authOptions = {
     providers: [
         CredentialProvider({
             name: "Credentials",
