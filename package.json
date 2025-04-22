@@ -1,5 +1,5 @@
 {
-  "name": "payTM-app",
+  "name": "paytm-app",
   "private": true,
   "scripts": {
     "build": "turbo run build",
