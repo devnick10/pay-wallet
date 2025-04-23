@@ -70,6 +70,9 @@ export const authOptions = {
         })
     ],
     secret: process.env.NEXTAUTH_SECRET || "secret",
+    pages: {
+        signIn: '/signin'
+    },
     callbacks: {
         async session({ token, session }: { token: JWT, session: Session }) {
             if (session.user) {

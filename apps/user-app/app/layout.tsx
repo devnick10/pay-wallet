@@ -2,8 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Provider } from "../provider";
-import { AppbarClient } from "./components/AppbarClient";
+import { AppbarClient } from "../components/AppbarClient";
 import { JSX } from "react";
+import { ThemeProvider } from "next-themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,9 +22,16 @@ export default function RootLayout({
     <html lang="en">
       <Provider>
         <body className={inter.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
             {children}
-          
-        </body>
+
+        </ThemeProvider>
+          </body>
       </Provider>
     </html>
   );

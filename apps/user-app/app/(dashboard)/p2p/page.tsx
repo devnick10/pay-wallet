@@ -1,9 +1,9 @@
 import React from 'react'
-import SendMoney from '../../components/SendCard'
+import SendMoney from '../../../components/SendCard'
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../lib/authOptions';
 import prisma from '@repo/db/client';
-import { P2pTransactions } from '../../components/P2pTransactions';
+import { P2pTransactions } from '../../../components/P2pTransactions';
 
 async function getP2pTransactions() {
   const session = await getServerSession(authOptions);
@@ -12,8 +12,8 @@ async function getP2pTransactions() {
       fromUserId: Number(session?.user?.id)
     },
     select: {
-      amount:true,
-      timestamp:true,
+      amount: true,
+      timestamp: true,
       toUser: true,
       fromUser: true
     }
@@ -21,13 +21,13 @@ async function getP2pTransactions() {
   return txns.map(t => ({
     time: t.timestamp,
     amount: t.amount,
-    to:t.toUser.number,
-    from:t.fromUser.number
+    to: t.toUser.number,
+    from: t.fromUser.number
   }))
 }
 export default async function page() {
-  const transactions = await getP2pTransactions() 
-  
+  const transactions = await getP2pTransactions()
+
   return (<div className="w-screen">
     <div className="text-4xl text-[#6a51a6] pt-8 mb-8 font-bold">
       P2p Transfer
@@ -38,7 +38,7 @@ export default async function page() {
       </div>
       <div >
         <div className="">
-             <P2pTransactions transactions={transactions}/>
+          <P2pTransactions transactions={transactions} />
         </div>
       </div>
     </div>

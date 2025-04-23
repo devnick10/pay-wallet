@@ -3,7 +3,7 @@ import { Button } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
 import { TextInput } from "@repo/ui/TextInput";
 import { useState } from "react";
-import { p2pTransfer } from "../lib/actions/p2pTransfer";
+import { p2pTransfer } from "../app/lib/actions/p2pTransfer";
 
 export default function SendCard() {
 
@@ -22,7 +22,7 @@ export default function SendCard() {
                         setAmount(Number(value))
                     }} />
                     <div className="py-2 flex justify-center items-center">
-                        <Button onClick={ async() => {
+                        <Button onClick={async () => {
                             await p2pTransfer(number, amount * 100)
                         }}>Send Money</Button >
                     </div>
