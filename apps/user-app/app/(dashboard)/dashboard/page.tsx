@@ -115,7 +115,7 @@ export default function DashboardPage() {
             </div>
           </CardContent>
           <CardFooter>
-            <Link href="/dashboard/p2p-history">
+            <Link href="/p2p-history">
               <Button variant="outline" size="sm">
                 View All Transactions
               </Button>
@@ -129,25 +129,25 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
-              <Link href="/dashboard/add-money">
+              <Link href="/add-money">
                 <div className="flex flex-col items-center justify-center rounded-lg border p-4 hover:bg-muted">
                   <Wallet className="mb-2 h-6 w-6 text-primary" />
                   <span className="text-sm font-medium">Add Money</span>
                 </div>
               </Link>
-              <Link href="/dashboard/send-money">
+              <Link href="/send-p2p">
                 <div className="flex flex-col items-center justify-center rounded-lg border p-4 hover:bg-muted">
                   <Send className="mb-2 h-6 w-6 text-primary" />
                   <span className="text-sm font-medium">Send Money</span>
                 </div>
               </Link>
-              <Link href="/dashboard/p2p-history">
+              <Link href="/p2p-history">
                 <div className="flex flex-col items-center justify-center rounded-lg border p-4 hover:bg-muted">
                   <History className="mb-2 h-6 w-6 text-primary" />
                   <span className="text-sm font-medium">P2P History</span>
                 </div>
               </Link>
-              <Link href="/dashboard/wallet-history">
+              <Link href="/wallet-history">
                 <div className="flex flex-col items-center justify-center rounded-lg border p-4 hover:bg-muted">
                   <CreditCard className="mb-2 h-6 w-6 text-primary" />
                   <span className="text-sm font-medium">Wallet History</span>

@@ -1,19 +1,20 @@
 "use client"
 import React, { useState } from 'react'
 import { Button } from './ui/button'
-import { Bell, CreditCard, LogOut, Menu, User, X } from "lucide-react"
+import { CreditCard, LogOut, Menu, User, } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet'
 import { sidebarNavItems } from '@/app/(dashboard)/layout'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ThemeToggle } from './ThemeToggle'
+import { useSession } from 'next-auth/react'
 
 function DashboardNav() {
     const [open, setOpen] = useState(false)
     const pathname = usePathname()
-
+    const session = useSession()
     return (
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+        <header className="flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
                     <Button variant="outline" size="icon" className="md:hidden">
@@ -26,10 +27,6 @@ function DashboardNav() {
                         <div className="flex items-center gap-2 border-b p-4">
                             <CreditCard className="h-6 w-6 text-primary" />
                             <span className="text-lg font-bold">PayWallet</span>
-                            <Button variant="ghost" size="icon" className="ml-auto" onClick={() => setOpen(false)}>
-                                <X className="h-5 w-5" />
-                                <span className="sr-only">Close</span>
-                            </Button>
                         </div>
                         <nav className="flex-1 overflow-auto py-2">
                             <div className="grid gap-1 px-2">
@@ -48,13 +45,13 @@ function DashboardNav() {
                             </div>
                         </nav>
                         <div className="border-t p-4">
-                            <Link
-                                href="/"
-                                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                            <Button
+                                className='w-full'
+                                variant={"destructive"}
                             >
                                 <LogOut className="h-4 w-4" />
                                 Logout
-                            </Link>
+                            </Button>
                         </div>
                     </div>
                 </SheetContent>
@@ -68,15 +65,14 @@ function DashboardNav() {
                 <span className="text-lg font-bold">PayWallet</span>
             </div>
             <div className="ml-auto flex items-center gap-4">
-                <Button variant="ghost" size="icon">
-                    <Bell className="h-5 w-5" />
-                    <span className="sr-only">Notifications</span>
-                </Button>
-                <ThemeToggle />
+                <div className='flex items-center justify-center'>
                 <Button variant="ghost" size="icon" className="rounded-full">
                     <User className="h-5 w-5" />
                     <span className="sr-only">Profile</span>
                 </Button>
+                 <h3 className='hover:border-b uppercase border-neutral-600 '>{session?.data?.user.name}</h3>
+                </div>
+                <ThemeToggle />
             </div>
         </header>
     )
