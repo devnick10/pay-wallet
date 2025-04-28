@@ -1,10 +1,7 @@
-"use client"
-import { AppbarClient } from "./components/AppbarClient"
+import LandingPage from "@/components/LandingPage"
 
 
 export default function page() {
-  return <div className="min-w-screen min-h-screen bg-[#ebe6e6]">
-    <AppbarClient />
-  </div>
+  return <LandingPage/>
 }
 

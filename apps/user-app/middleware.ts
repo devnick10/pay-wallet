@@ -10,16 +10,22 @@ export async function middleware(request: NextRequest) {
         '/p2p',
         '/transactions'
     ]
-
+    
     const isProtected = privateRoutes.some((route) => request.nextUrl.pathname.startsWith(route))
       
+    if (token && request.nextUrl.pathname === "/" ) {
+        return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+    if (token && request.nextUrl.pathname === "/signin" ) {
+        return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
     if (isProtected && !token) {
-        return NextResponse.redirect(new URL('/api/auth/signin', request.url))
+        return NextResponse.redirect(new URL('/signin', request.url))
     }
 
     return NextResponse.next()
 }
 
 export const config = {
-    matcher: ["/dashboard/:path*", "/transfer", "/p2p", "/transactions"],
+    matcher: ["/dashboard/:path*", "/transfer", "/p2p", "/transactions","/signin","/"],
 }

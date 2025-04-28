@@ -1,0 +1,53 @@
+{
+    "extends": [
+      "next/core-web-vitals",
+      "plugin:@typescript-eslint/recommended",
+      "turbo"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint", "react", "turbo"],
+    "rules": {
+      // React-specific rules
+      "react/display-name": "off",
+      "react/no-unescaped-entities": "off",
+      "react/prop-types": "off",
+      
+      // TypeScript rules
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+        }
+      ],
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      
+      // React Hooks
+      "react-hooks/exhaustive-deps": "warn",
+      
+      // Turbo-specific
+      "turbo/no-undeclared-env-vars": [
+        "error",
+        {
+          "allowList": ["NEXTAUTH_SECRET", "NEXT_PUBLIC_*"]
+        }
+      ]
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      },
+      "next": {
+        "rootDir": true
+      }
+    },
+    "ignorePatterns": [
+      "**/*.d.ts",
+      "**/*.config.js",
+      "**/*.config.ts",
+      ".next",
+      "node_modules"
+    ]
+  }

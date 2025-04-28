@@ -1,50 +1,100 @@
-import { JSX } from "react";
-import { SidebarItem } from "../components/Sidebaritem";
-import { AppbarClient } from "../components/AppbarClient";
+"use client"
 
+import type React from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { CreditCard, History, Home, LogOut, Send, Settings, Wallet } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import DashboardNav from "@/components/DashboardNav"
+import { signOut } from "next-auth/react"
+import toast from "react-hot-toast"
 
-export default function Layout({
-    children,
+export const sidebarNavItems = [
+  {
+    title: "Dashboard",
+    href: "/dashboard",
+    icon: Home,
+  },
+  {
+    title: "Add Money",
+    href: "/add-money",
+    icon: Wallet,
+  },
+  {
+    title: "Send Money",
+    href: "/send-p2p",
+    icon: Send,
+  },
+  {
+    title: "P2P History",
+    href: "/p2p-history",
+    icon: History,
+  },
+  {
+    title: "Wallet History",
+    href: "/wallet-history",
+    icon: CreditCard,
+  },
+  {
+    title: "Settings",
+    href: "/settings",
+    icon: Settings,
+  },
+]
+
+export default function DashboardLayout({
+  children,
 }: {
-    children: React.ReactNode;
-}): JSX.Element {
-    return (
-        <div>
-                <AppbarClient />
-            <div className="flex">
-                <div className="w-72 border-r border-slate-300 min-h-screen mr-4 pt-28">
-                    <div>
-                        <SidebarItem href={"/dashboard"} icon={<HomeIcon />} title="Home" />
-                        <SidebarItem href={"/transfer"} icon={<TransferIcon />} title="Transfer" />
-                        <SidebarItem href={"/transactions"} icon={<TransactionsIcon />} title="Transactions" />
-                        <SidebarItem href={"/p2p"} icon={<P2pTransferIcon />} title="P2p Transfer" />
-                    </div>
-                </div>
-                {children}
+  children: React.ReactNode
+}) {
+  const pathname = usePathname()
+
+  return (
+    <div className="flex h-dvh flex-col">
+      <DashboardNav />
+      <div className="flex flex-1 overflow-hidden">
+        <aside className="hidden w-64 shrink-0 border-r md:block">
+          <div className="flex h-full flex-col">
+            <nav className="flex-1 overflow-y-auto py-4">
+              <div className="grid gap-1 px-2">
+                {sidebarNavItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${pathname === item.href
+                        ? "bg-primary text-primary-foreground"
+                        : "hover:bg-muted"
+                      }`}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    {item.title}
+                  </Link>
+                ))}
+              </div>
+            </nav>
+            <div className="border-t p-4">
+              <div className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
+                <LogOut className="h-4 w-4" />
+                <Button
+                  variant="destructive"
+                  className="w-full"
+                  onClick={() =>{ 
+                    signOut({ callbackUrl: "/" })
+                    toast.success("Signout successfully")
+                  }}
+                >
+                  Logout
+                </Button>
+              </div>
             </div>
-        </div>
-    );
-}
-
-function HomeIcon() {
-    return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-        <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-    </svg>
-}
-function TransferIcon() {
-    return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
-    </svg>
-}
-function TransactionsIcon() {
-    return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-    </svg>
-
-}
-function P2pTransferIcon() {
-    return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
-    </svg>
-
+          </div>
+        </aside>
+        <main className="flex-1 overflow-y-auto">
+          <div className="h-full p-4 md:p-6">
+            {children}
+          </div>
+        </main>
+      </div>
+    </div>
+  )
 }
