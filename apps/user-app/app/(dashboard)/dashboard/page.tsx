@@ -17,6 +17,8 @@ export default async function DashboardPage() {
   const totalRecvied = p2p.filter(txn => txn.fromUser.id !== Number(session?.user.id))
     .reduce((sum, txn) => sum + txn.amount, 0) / 100
   const recentP2p = p2p.slice(0,10)
+
+  if(!session?.user.email)return
   return (
     <div className="flex w-full flex-col gap-6 p-4 md:gap-8 md:p-8">
       <div className="flex flex-col gap-2">
@@ -59,8 +61,7 @@ export default async function DashboardPage() {
             <CardDescription>Your recent payment activities</CardDescription>
           </CardHeader>
           <CardContent>
-
-            <TransactionsTable transfers={recentP2p} currentUserId={session?.user.email!} dateNone={true} />
+            <TransactionsTable transfers={recentP2p} currentUserId={session.user.email} dateNone={true} />
           </CardContent>
           <CardFooter>
             <Link href="/p2p-history">
