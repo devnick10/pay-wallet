@@ -25,7 +25,7 @@ export const authOptions = {
                 phone: { label: "Phone number", type: "text", placeholder: "123123", required: true },
                 password: { label: "Password", type: "password", placeholder: "***", required: true },
             },
-            async authorize(credentials: any) {
+            async authorize(credentials:any) {
                 // do zod validation, OTP validaton
                 const hashedpassword = await bcrypt.hash(credentials.password, 10)
                 const existingUser = await prisma.user.findFirst({

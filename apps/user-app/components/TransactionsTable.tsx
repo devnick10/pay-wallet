@@ -56,7 +56,7 @@ export function TransactionsTable({ transfers, currentUserId }: TransactionsTabl
       
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="">
             <TableRow>
               <TableHead>Transaction ID</TableHead>
               <TableHead>Date & Time</TableHead>

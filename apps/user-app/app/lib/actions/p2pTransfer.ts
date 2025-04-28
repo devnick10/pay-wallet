@@ -70,6 +70,7 @@ export async function p2pTransfer(to: string, amount: number) {
         })
 
     } catch (error) {
+        console.error(error)
         return {
             message: "Error while transfer"
         }

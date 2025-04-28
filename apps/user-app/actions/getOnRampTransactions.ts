@@ -18,7 +18,15 @@ export async function getOnRampTransactions(): Promise<OnRampTransaction[]> {
                 userId: Number(session?.user.id)
             }
         });
-        return txns.map(t => ({
+        return txns.map((t:{
+            id: number;
+            token: string;
+            userId: number;
+            amount: number;
+            status: "Success" | "Failure" | "Processing";
+            provider: string;
+            startTime: Date;
+        }) => ({
             id: t.id.toString(),
             time: t.startTime,
             amount: t.amount,

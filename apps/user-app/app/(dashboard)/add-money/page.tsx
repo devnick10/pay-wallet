@@ -19,7 +19,7 @@ async function getBalance() {
   }
 }
 
-export default async function () {
+export default async function Page() {
   const balance = await getBalance();
   const transactions = await getOnRampTransactions();
   return (

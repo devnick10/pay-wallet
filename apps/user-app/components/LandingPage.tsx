@@ -279,7 +279,7 @@ export default function LandingPage() {
                 </div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">What Our Users Say</h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Don't just take our word for it. Here's what our users have to say about PayWallet.
+                  Don&apos;t just take our word for it. Here&apos;s what our users have to say about PayWallet.
                 </p>
               </div>
             </div>
@@ -287,8 +287,8 @@ export default function LandingPage() {
               <div className="flex flex-col justify-between rounded-lg border bg-background p-6 shadow-sm">
                 <div className="space-y-4">
                   <p className="text-muted-foreground">
-                    "PayWallet has completely changed how I manage my finances. The instant transfers and user-friendly
-                    interface make it my go-to payment app."
+                    &qout;PayWallet has completely changed how I manage my finances. The instant transfers and user-friendly
+                    interface make it my go-to payment app.&quot;
                   </p>
                 </div>
                 <div className="mt-6 flex items-center gap-3">
@@ -304,8 +304,8 @@ export default function LandingPage() {
               <div className="flex flex-col justify-between rounded-lg border bg-background p-6 shadow-sm">
                 <div className="space-y-4">
                   <p className="text-muted-foreground">
-                    "The security features give me peace of mind, and the cashback rewards are a great bonus. I've
-                    recommended PayWallet to all my friends."
+                    &quot;The security features give me peace of mind, and the cashback rewards are a great bonus. I&apos;ve
+                    recommended PayWallet to all my friends.&quot;
                   </p>
                 </div>
                 <div className="mt-6 flex items-center gap-3">
@@ -321,8 +321,8 @@ export default function LandingPage() {
               <div className="flex flex-col justify-between rounded-lg border bg-background p-6 shadow-sm">
                 <div className="space-y-4">
                   <p className="text-muted-foreground">
-                    "As a small business owner, the Premium plan has been invaluable. The detailed analytics help me
-                    track all my transactions efficiently."
+                    &quot;As a small business owner, the Premium plan has been invaluable. The detailed analytics help me
+                    track all my transactions efficiently.&quot;
                   </p>
                 </div>
                 <div className="mt-6 flex items-center gap-3">

@@ -32,7 +32,7 @@ export function OnRampTable({
     if (initialTransactions.length === 0) {
       loadTransactions();
     }
-  }, []);
+  },[initialTransactions]);
 
   const filteredTransactions = transactions.filter((transaction) => {
     const matchesSearch =
@@ -75,7 +75,7 @@ export function OnRampTable({
       />
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="">
             <TableRow>
               <TableHead>Transaction ID</TableHead>
               <TableHead>Date & Time</TableHead>
