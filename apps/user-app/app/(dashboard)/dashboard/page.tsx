@@ -1,24 +1,36 @@
-import Link from "next/link"
-import { ArrowRight, CreditCard, History, Send, Wallet } from "lucide-react"
+import { getBalance } from "@/actions/getBalance"
+import { getP2pTransactions } from "@/actions/getP2pTransactions"
+import { authOptions } from "@/app/lib/authOptions"
+import { TransactionsTable } from "@/components/TransactionsTable"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { ArrowRight, CreditCard, History, Send, Wallet } from "lucide-react"
+import { getServerSession } from "next-auth"
+import Link from "next/link"
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const balance = await getBalance()
+  const p2p = await getP2pTransactions()
+  const session = await getServerSession(authOptions)
+  const totalSent = p2p.filter(txn => txn.fromUser.id === Number(session?.user.id))
+    .reduce((sum, txn) => sum + txn.amount, 0) / 100
+  const totalRecvied = p2p.filter(txn => txn.fromUser.id !== Number(session?.user.id))
+    .reduce((sum, txn) => sum + txn.amount, 0) / 100
+  const recentP2p = p2p.slice(0,10)
   return (
     <div className="flex w-full flex-col gap-6 p-4 md:gap-8 md:p-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
         <p className="text-muted-foreground">Welcome back, Rahul! Here&apos;s an overview of your wallet.</p>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Wallet Balance</CardTitle>
             <Wallet className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₹24,500.00</div>
-            <p className="text-xs text-muted-foreground">+₹2,500 from last month</p>
+            <div className="text-2xl font-bold">₹{balance.amount / 100}</div>
           </CardContent>
         </Card>
         <Card>
@@ -27,8 +39,7 @@ export default function DashboardPage() {
             <Send className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₹12,234.00</div>
-            <p className="text-xs text-muted-foreground">+₹1,234 from last month</p>
+            <div className="text-2xl font-bold">₹{totalSent}</div>
           </CardContent>
         </Card>
         <Card>
@@ -37,18 +48,7 @@ export default function DashboardPage() {
             <ArrowRight className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₹18,400.00</div>
-            <p className="text-xs text-muted-foreground">+₹3,400 from last month</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Cashback Earned</CardTitle>
-            <CreditCard className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">₹345.00</div>
-            <p className="text-xs text-muted-foreground">+₹45 from last month</p>
+            <div className="text-2xl font-bold">₹{totalRecvied}</div>
           </CardContent>
         </Card>
       </div>
@@ -59,60 +59,8 @@ export default function DashboardPage() {
             <CardDescription>Your recent payment activities</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 rounded-lg border p-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <ArrowRight className="h-5 w-5 rotate-180 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Sent to Priya Sharma</p>
-                  <p className="text-xs text-muted-foreground">Today, 2:34 PM</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-red-500">-₹1,200.00</p>
-                  <p className="text-xs text-muted-foreground">Completed</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 rounded-lg border p-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <ArrowRight className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Received from Rahul Patel</p>
-                  <p className="text-xs text-muted-foreground">Yesterday, 7:15 PM</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-green-500">+₹500.00</p>
-                  <p className="text-xs text-muted-foreground">Completed</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 rounded-lg border p-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <Wallet className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Added money to wallet</p>
-                  <p className="text-xs text-muted-foreground">Jan 15, 10:30 AM</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-green-500">+₹5,000.00</p>
-                  <p className="text-xs text-muted-foreground">Completed</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 rounded-lg border p-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <ArrowRight className="h-5 w-5 rotate-180 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Sent to Ananya Desai</p>
-                  <p className="text-xs text-muted-foreground">Jan 12, 4:45 PM</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-red-500">-₹2,500.00</p>
-                  <p className="text-xs text-muted-foreground">Completed</p>
-                </div>
-              </div>
-            </div>
+
+            <TransactionsTable transfers={recentP2p} currentUserId={session?.user.email!} dateNone={true} />
           </CardContent>
           <CardFooter>
             <Link href="/p2p-history">

@@ -1,23 +1,10 @@
-import prisma from "@repo/db/client";
 import { AddMoney } from "@/components/AddMoneyCard";
 import { BalanceCard } from "@/components/BalanceCard";
 import { OnRampTransactions } from "@/components/OnRampTransaction";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/lib/authOptions";
 import { getOnRampTransactions } from "@/actions/getOnRampTransactions";
+import { getBalance } from "@/actions/getBalance";
 
-async function getBalance() {
-  const session = await getServerSession(authOptions);
-  const balance = await prisma.balance.findUnique({
-    where: {
-      userId: Number(session?.user?.id)
-    }
-  });
-  return {
-    amount: balance?.amount || 0,
-    locked: balance?.locked || 0
-  }
-}
+
 
 export default async function Page() {
   const balance = await getBalance();

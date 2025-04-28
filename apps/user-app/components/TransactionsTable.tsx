@@ -9,9 +9,10 @@ import { P2PTransfer } from "@/actions/getP2pTransactions";
 interface TransactionsTableProps {
   transfers: P2PTransfer[];
   currentUserId: string;
+  dateNone?:boolean;
 }
 
-export function TransactionsTable({ transfers, currentUserId }: TransactionsTableProps) {
+export function TransactionsTable({ transfers, currentUserId ,dateNone}: TransactionsTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<"all" | "sent" | "received">("all");
 
@@ -59,7 +60,7 @@ export function TransactionsTable({ transfers, currentUserId }: TransactionsTabl
           <TableHeader className="">
             <TableRow>
               <TableHead>Transaction ID</TableHead>
-              <TableHead>Date & Time</TableHead>
+             {!dateNone && <TableHead>Date & Time</TableHead>}
               <TableHead>Counterparty</TableHead>
               <TableHead>Phone Number</TableHead>
               <TableHead>Type</TableHead>
@@ -77,7 +78,9 @@ export function TransactionsTable({ transfers, currentUserId }: TransactionsTabl
                 return (
                   <TableRow key={transfer.id}>
                     <TableCell className="font-medium">TX{transfer.id}</TableCell>
-                    <TableCell>{formatDate(transfer.timestamp)}</TableCell>
+                    {
+                      !dateNone && <TableCell>{formatDate(transfer.timestamp)}</TableCell>
+                    }
                     <TableCell>{counterparty.name || 'Unknown'}</TableCell>
                     <TableCell>{counterparty.number || 'N/A'}</TableCell>
                     <TableCell>

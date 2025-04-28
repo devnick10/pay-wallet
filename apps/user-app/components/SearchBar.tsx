@@ -1,9 +1,8 @@
 "use client"
 
-import { Search, Filter, Calendar, Download } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
+import { Filter, Search } from "lucide-react"
 
 interface SearchBarProps {
   searchTerm: string
@@ -31,7 +30,7 @@ export function SearchBar({
         />
       </div>
       <div className="flex gap-2">
-        <Select defaultValue={filterType} onValueChange={onFilterChange}>
+        <Select value={filterType} onValueChange={onFilterChange}>
           <SelectTrigger className="w-[180px]">
             <Filter className="mr-2 h-4 w-4" />
             <SelectValue placeholder="Filter" />
@@ -42,14 +41,6 @@ export function SearchBar({
             <SelectItem value="received">Money Received</SelectItem>
           </SelectContent>
         </Select>
-        <Button variant="outline" size="icon">
-          <Calendar className="h-4 w-4" />
-          <span className="sr-only">Date range</span>
-        </Button>
-        <Button variant="outline" size="icon">
-          <Download className="h-4 w-4" />
-          <span className="sr-only">Download</span>
-        </Button>
       </div>
     </div>
   )

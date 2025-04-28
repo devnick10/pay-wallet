@@ -18,7 +18,7 @@ const SUPPORTED_BANKS = [{
 
 export const AddMoney = () => {
     const [redirectUrl, setRedirectUrl] = useState(SUPPORTED_BANKS[0]?.redirectUrl);
-    const [amount, setAmount] = useState<number>(0);
+    const [amount, setAmount] = useState<number>();
     const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
     const [isLoading, setIsLoading] = useState(false);
 
@@ -78,7 +78,7 @@ return (
                             setProvider(bank.name);
                         }
                     }}
-                    defaultValue={provider}
+                    value={provider}
                 >
                     <SelectTrigger id="bank">
                         <SelectValue placeholder="Select bank" />

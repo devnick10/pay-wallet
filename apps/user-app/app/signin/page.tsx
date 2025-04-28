@@ -102,11 +102,11 @@ export default function LoginPage() {
                   password,
                   callbackUrl: "/dashboard"
                 })
+                toast.success("Signin successfully")
               } catch (error) {
-               console.error(error)
-               toast.error("Signin failed,plz try again")                
+                console.error(error)
+                toast.error("Signin failed,plz try again")
               }
-              toast.success("Signin successfully")
             }} className="w-full">
               Sign In
             </Button>

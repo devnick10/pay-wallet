@@ -1,21 +1,60 @@
 "use client"
 
+import { updatePassword } from "@/actions/updatePassword"
+import { updateUser } from "@/actions/updateUser"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useState } from "react"
+import { useSession } from "next-auth/react"
+import { ChangeEvent, useState } from "react"
+import toast from "react-hot-toast"
 
 export default function SettingsPage() {
+  const session = useSession()
   const [isLoading, setIsLoading] = useState(false)
+  const [user, setUser] = useState({ name:"", email: "" })
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassowrd: ""
+  })
 
-  const handleSave = () => {
+  const handleUserUpdate = async () => {
     setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const { message, success } = await updateUser(user)
+      if (success) toast.success(message)
+      setUser({ name: "", email: "" })
+    } catch (error) {
+      console.error(error)
+      toast.error("User detailed failed to update.")
+    } finally {
       setIsLoading(false)
-      alert("Settings saved successfully!")
-    }, 1000)
+    }
+  }
+  const handlePasswordUpdate = async () => {
+    setIsLoading(true)
+    if (
+      !passwordData || !passwordData.confirmPassowrd || !passwordData.newPassword ||
+      passwordData.newPassword !== passwordData.confirmPassowrd
+    ) {
+      return toast.error("Please verify credentials")
+    }
+    try {
+      const { message, success } = await updatePassword(passwordData)
+      if (success) toast.success(message)
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassowrd: ""
+      })
+    } catch (error) {
+      console.error(error)
+      toast.error("User detailed failed to update.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -33,20 +72,28 @@ export default function SettingsPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="fullName">Full Name</Label>
-              <Input id="fullName" defaultValue="Rahul Patel" />
+              <Input
+                value={user.name}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setUser(prev => ({ ...prev, name: e.target.value }))}
+                id="fullName" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
-              <Input id="email" type="email" defaultValue="rahul.patel@example.com" />
+              <Input
+                value={user.email}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setUser(prev => ({ ...prev, email: e.target.value }))}
+                id="email"
+                type="email"
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone Number</Label>
-              <Input id="phone" defaultValue="9876543210" disabled />
+              <Input id="phone" value={session.data?.user.email} disabled />
               <p className="text-xs text-muted-foreground">Phone number cannot be changed</p>
             </div>
           </CardContent>
           <CardFooter>
-            <Button onClick={handleSave} disabled={isLoading} className="ml-auto">
+            <Button onClick={handleUserUpdate} disabled={isLoading} className="ml-auto">
               {isLoading ? "Saving..." : "Save Changes"}
             </Button>
           </CardFooter>
@@ -59,20 +106,32 @@ export default function SettingsPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="currentPassword">Current Password</Label>
-              <Input id="currentPassword" type="password" />
+              <Input
+                value={passwordData.currentPassword}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
+                id="currentPassword"
+                type="password" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="newPassword">New Password</Label>
-              <Input id="newPassword" type="password" />
+              <Input
+                value={passwordData.newPassword}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
+                id="newPassword"
+                type="password" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirm New Password</Label>
-              <Input id="confirmPassword" type="password" />
+              <Input
+                value={passwordData.confirmPassowrd}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setPasswordData(prev => ({ ...prev, confirmPassowrd: e.target.value }))}
+                id="confirmPassword"
+                type="password" />
             </div>
           </CardContent>
           <CardFooter>
-            <Button onClick={handleSave} disabled={isLoading} className="ml-auto">
-              {isLoading ? "Updating..." : "Update Password"}
+            <Button onClick={handlePasswordUpdate} className="ml-auto">
+              {"Update Password"}
             </Button>
           </CardFooter>
         </Card>

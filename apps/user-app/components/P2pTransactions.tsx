@@ -34,7 +34,7 @@ export const P2pTransactions = ({transactions}: {transactions:P2PTransfer[]}) =>
       <CardHeader>
         <CardTitle>Recent Transactions</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent>
         {transactions.map((t, i) => {
           return (
             <div key={i} className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors">
