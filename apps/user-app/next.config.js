@@ -4,6 +4,9 @@ const nextConfig = {
     env: {
         PORT: "3001",
     },
+    experimental: {
+        missingSuspenseWithCSRBailout: false,
+    },
 };
 
 export default nextConfig;
