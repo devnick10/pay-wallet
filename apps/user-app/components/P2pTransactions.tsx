@@ -43,8 +43,6 @@ export const P2pTransactions = async ({ transactions }: { transactions: P2PTrans
       </CardHeader>
       <CardContent>
         {transactions.map((t) => {
-          if (t.fromUser.number === t.toUser.number) return null;
-
           const isSent = t.fromUser.number === currentUserNumber;
           const otherParty = isSent ? t.toUser : t.fromUser;
           const amount = (t.amount / 100).toFixed(2);
