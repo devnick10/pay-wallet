@@ -1,8 +1,10 @@
 export default function NotFound() {
     return (
-        <div className="flex h-screen flex-col items-center justify-center">
-            <h2>Not Found</h2>
-            <p>Could not find requested resource</p>
+      <div className="grid h-screen place-items-center">
+        <div className="text-center">
+          <h2 className="text-xl font-bold">404 | Page Not Found</h2>
+          <p>The requested resource doesn't exist</p>
         </div>
-    );
-}
+      </div>
+    )
+  }
