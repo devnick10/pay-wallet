@@ -5,7 +5,7 @@ import { ChangeEvent, useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { createOnRampTransaction } from "@/app/lib/actions/onRampTransaction";
+import { createOnRampTransaction } from "@/actions/onRampTransaction";
 import toast from "react-hot-toast";
 
 const SUPPORTED_BANKS = [{

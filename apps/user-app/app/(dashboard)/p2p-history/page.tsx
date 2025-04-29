@@ -8,7 +8,7 @@ import { authOptions } from "@/app/lib/authOptions"
 export default async function P2PHistoryPage() {
   const transactions = await getP2pTransactions()
   const session = await getServerSession(authOptions)
-  const userId = session?.user.email
+  if(!session?.user.email)return null
   return (
     <div className="flex flex-col gap-6 p-4 md:gap-8 md:p-8">
       <div className="flex flex-col gap-2">
@@ -21,7 +21,7 @@ export default async function P2PHistoryPage() {
           <CardDescription>A record of all your sent and received payments.</CardDescription>
         </CardHeader>
         <CardContent>
-          <TransactionsTable transfers={transactions} currentUserId={userId!} />
+          <TransactionsTable transfers={transactions} currentUserNumber={session?.user.email} />
         </CardContent>
       </Card>
     </div>

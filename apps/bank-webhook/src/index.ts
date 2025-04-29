@@ -1,53 +1,53 @@
 import express from "express";
 import db from "@repo/db/client";
+import { onRampValidationSchema } from "@repo/common/common";
 const app = express();
 
 app.use(express.json())
 
 app.post("/hdfcWebhook", async (req, res) => {
-    //TODO: Add zod validation here?
     //TODO: HDFC bank should ideally send us a secret so we know this is sent by them
-    
-    const paymentInformation: {
-        token: string;
-        userId: string;
-        amount: string
-    } = {
-        token: req.body.token,
-        userId: req.body.user_identifier,
-        amount: req.body.amount
-    };
-
-    const transactionStatus = await db.onRampTransaction.findUnique({
-        where:{
-            token:paymentInformation.token
-        }
-    })
-
-    if (transactionStatus?.status == "Success") {
-        res.json({
-            message:"Invalid token"
-            
+    const result = onRampValidationSchema.safeParse(req.body)
+    if (!result.success) {
+        res.status(411).json({
+            message: "Verify inputs"
         })
         return
     }
-    
+    const {
+        token, amount, user_identifier
+    } = result.data;
+
+    const transactionStatus = await db.onRampTransaction.findUnique({
+        where: {
+            token
+        }
+    })
+           
+    if (transactionStatus?.status == "Success") {
+        res.json({
+            message: "Invalid token"
+
+        })
+        return
+    }
+
     try {
         await db.$transaction([
             db.balance.updateMany({
                 where: {
-                    userId: Number(paymentInformation.userId)
+                    userId: Number(user_identifier)
                 },
                 data: {
                     amount: {
-                        increment: Number(paymentInformation.amount)
+                        increment: Number(amount)
                     }
                 }
             }),
             db.onRampTransaction.updateMany({
                 where: {
-                    token: paymentInformation.token
-                }, 
+                    token
+                },
                 data: {
                     status: "Success",
                 }
@@ -57,7 +57,7 @@ app.post("/hdfcWebhook", async (req, res) => {
         res.json({
             message: "Captured"
         })
-    } catch(e) {
+    } catch (e) {
         console.error(e);
         res.status(411).json({
             message: "Error while processing webhook"

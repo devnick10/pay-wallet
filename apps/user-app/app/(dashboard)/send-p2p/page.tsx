@@ -15,7 +15,8 @@ export default async function page() {
       <div className="grid gap-6 md:grid-cols-2">
         {/* send money card */}
         <SendMoney />
-        <P2pTransactions transactions={transactions}/>
+        {/* recent transaction card */}
+        <P2pTransactions transactions={transactions.slice(0,10)}/>
       </div>
     </div>
   )

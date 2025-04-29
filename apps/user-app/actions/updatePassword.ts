@@ -3,7 +3,7 @@
 import { authOptions } from "@/app/lib/authOptions";
 import prisma from "@repo/db/client"
 import { getServerSession } from "next-auth";
-
+import bcrypt from "bcrypt"
 interface passowrdData {
     currentPassword: string;
     newPassword: string;
@@ -12,33 +12,20 @@ interface passowrdData {
 
 export const updatePassword = async (data: passowrdData) => {
     const session = await getServerSession(authOptions);
+    const hashedpassword = await bcrypt.hash(data.newPassword,10)
+    
     try {
-
-        const user = await prisma.user.findUnique({
-            where:{
-                id:Number(session?.user.id)
+        await prisma.user.update({
+            where: { id: Number(session?.user?.id) },
+            data: {
+                password: hashedpassword
             }
-        })
-
-        if (user) {
-            await prisma.user.update({
-                where: { id: user?.id },
-                data: {
-                    password: data.newPassword
-                }
-            });
-
-            return {
-                success: true,
-                message: "Password updated successfully",
-            };
-        }
+        });
 
         return {
-            success: false,
-            message: "Failed to update password"
+            success: true,
+            message: "Password updated successfully",
         };
-
     } catch (error) {
         console.error("Password update error:", error);
         return {

@@ -1,9 +1,9 @@
-import CredentialProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt"
+import { signInSchema } from "@repo/common/common";
 import prisma from "@repo/db/client";
-import { JWT } from "next-auth/jwt";
+import bcrypt from "bcrypt";
 import { Session } from "next-auth";
-
+import { JWT } from "next-auth/jwt";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 declare module "next-auth" {
     interface Session {
@@ -18,24 +18,29 @@ declare module "next-auth" {
 
 export const authOptions = {
     providers: [
-        CredentialProvider({
+        CredentialsProvider({
             name: "Credentials",
             credentials: {
                 name: { label: "Name", type: "text", placeholder: "john doe" },
                 phone: { label: "Phone number", type: "text", placeholder: "123123", required: true },
                 password: { label: "Password", type: "password", placeholder: "***", required: true },
             },
-            async authorize(credentials:any) {
-                // do zod validation, OTP validaton
-                const hashedpassword = await bcrypt.hash(credentials.password, 10)
+            async authorize(credentials: any) {
+                const { data, success, error } = signInSchema.safeParse(credentials)
+                if (!success) {
+                    console.error(error)
+                    return null
+                }
+
+                const hashedpassword = await bcrypt.hash(data.password, 10)
                 const existingUser = await prisma.user.findFirst({
                     where: {
-                        number: credentials.phone
+                        number: data.phone
                     }
                 });
 
                 if (existingUser) {
-                    const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password)
+                    const passwordValidation = await bcrypt.compare(data.password, existingUser.password)
                     if (passwordValidation) {
                         return {
                             id: existingUser.id.toString(),
@@ -47,13 +52,23 @@ export const authOptions = {
                 }
 
                 try {
-
-                    const user = await prisma.user.create({
-                        data: {
-                            number: credentials.phone,
-                            password: hashedpassword
-                        }
-                    });
+                    const user = await prisma.$transaction(async () => {
+                        const user = await prisma.user.create({
+                            data: {
+                                name: data.name,
+                                number: data.phone,
+                                password: hashedpassword
+                            }
+                        })
+                        await prisma.balance.create({
+                            data: {
+                                amount: 0,
+                                locked: 0,
+                                userId: user.id,
+                            }
+                        })
+                        return user
+                    })
 
                     return {
                         id: user.id.toString(),
@@ -65,7 +80,6 @@ export const authOptions = {
                     console.error(err)
                 }
                 return null
-
             },
         })
     ],

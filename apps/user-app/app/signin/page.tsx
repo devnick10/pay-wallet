@@ -11,13 +11,15 @@ import { Label } from "@/components/ui/label"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { signIn } from "next-auth/react"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
-  const [phoneNumber, setPhoneNumber] = useState("")
-  const [password, setPassword] = useState("")
-  const [name, setName] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+  const [name, setName] = useState<string>("")
 
+  const router = useRouter()
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -92,20 +94,38 @@ export default function LoginPage() {
             </div>
             <Button onClick={async () => {
               if (!name.trim() || !phoneNumber.trim() || !password.trim()) {
-                toast.error("Plz provied all filds.")
-                return
+                toast.error("Please provide all fields");
+                return;
               }
+
               try {
-                await signIn("credentials", {
+                const result = await signIn("credentials", {
+                  redirect: false,
                   name,
                   phone: phoneNumber,
                   password,
                   callbackUrl: "/dashboard"
-                })
-                toast.success("Signin successfully")
+                });
+                
+                if (result?.error) {
+                  toast.error(result.error === "CredentialsSignin"
+                    ? "Invalid credentials"
+                    : result.error);
+                  return;
+                }
+
+                if (result?.url) {
+                  // Wait briefly to ensure session is set
+                  setTimeout(() => {
+                    toast.success("Sign in successful");
+                    router.push(result?.url!);
+                  }, 100);
+                } else {
+                  toast.error("Authentication failed - no redirect URL");
+                }
               } catch (error) {
-                console.error(error)
-                toast.error("Signin failed,plz try again")
+                console.error("Sign in error:", error);
+                toast.error("An unexpected error occurred");
               }
             }} className="w-full">
               Sign In

@@ -1,7 +1,7 @@
 "use server"
 
 import { getServerSession } from "next-auth"
-import { authOptions } from "../authOptions"
+import { authOptions } from "@/app/lib/authOptions"
 import prisma from "@repo/db/client";
 import { randomUUID } from "crypto";
 
