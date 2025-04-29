@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Button } from './ui/button'
 import { CreditCard, LogOut, Menu, User, } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet'
-import { sidebarNavItems } from '@/app/(dashboard)/layout'
+import { sidebarNavItems } from '@/app/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ThemeToggle } from './ThemeToggle'

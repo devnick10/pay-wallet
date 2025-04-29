@@ -1,46 +1,14 @@
 "use client"
 
-import type React from "react"
+import { sidebarNavItems } from "@/app/lib/utils"
+import DashboardNav from "@/components/DashboardNav"
+import { Button } from "@/components/ui/button"
+import { LogOut } from "lucide-react"
+import { signOut } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { CreditCard, History, Home, LogOut, Send, Settings, Wallet } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import DashboardNav from "@/components/DashboardNav"
-import { signOut } from "next-auth/react"
+import type React from "react"
 import toast from "react-hot-toast"
-
-export const sidebarNavItems = [
-  {
-    title: "Dashboard",
-    href: "/dashboard",
-    icon: Home,
-  },
-  {
-    title: "Add Money",
-    href: "/add-money",
-    icon: Wallet,
-  },
-  {
-    title: "Send Money",
-    href: "/send-p2p",
-    icon: Send,
-  },
-  {
-    title: "P2P History",
-    href: "/p2p-history",
-    icon: History,
-  },
-  {
-    title: "Wallet History",
-    href: "/wallet-history",
-    icon: CreditCard,
-  },
-  {
-    title: "Settings",
-    href: "/settings",
-    icon: Settings,
-  },
-]
 
 export default function DashboardLayout({
   children,
