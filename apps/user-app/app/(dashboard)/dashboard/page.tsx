@@ -61,7 +61,7 @@ export default async function DashboardPage() {
             <CardDescription>Your recent payment activities</CardDescription>
           </CardHeader>
           <CardContent>
-            <TransactionsTable transfers={recentP2p} currentUserId={session.user.email} dateNone={true} />
+            <TransactionsTable transfers={recentP2p} currentUserNumber={session.user.email} dateNone={true} />
           </CardContent>
           <CardFooter>
             <Link href="/p2p-history">

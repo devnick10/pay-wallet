@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react";
-import { p2pTransfer } from "../app/lib/actions/p2pTransfer";
+import { p2pTransfer } from "@/actions/p2pTransfer";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,11 +17,10 @@ export default function SendCard() {
         
         setIsLoading(true);
         try {
-            await p2pTransfer(number, amount * 100);
-            // Reset form after successful transfer
+            const res = await p2pTransfer(number, amount * 100);
             setNumber("");
             setAmount(0);
-            toast.success("Transfer successfully.")
+            toast.success(res.message)
         } catch (error) {
             toast.success("Transfer failed!")
             console.error("Transfer failed:", error);

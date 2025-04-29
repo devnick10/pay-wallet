@@ -24,7 +24,6 @@ export async function getP2pTransactions(): Promise<P2PTransfer[]> {
     if (!session?.user?.id) {
         return [];
     }
-
     const txns = await prisma.p2PTransfer.findMany({
         where: {
             OR: [

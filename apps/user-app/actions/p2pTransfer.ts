@@ -1,7 +1,7 @@
 "use server"
 
 import { getServerSession } from "next-auth";
-import { authOptions } from "../authOptions";
+import { authOptions } from "@/app/lib/authOptions";
 import prisma from "@repo/db/client";
 
 
@@ -68,6 +68,10 @@ export async function p2pTransfer(to: string, amount: number) {
             })
 
         })
+
+        return {
+            message: "Transfer success"
+        }
 
     } catch (error) {
         console.error(error)

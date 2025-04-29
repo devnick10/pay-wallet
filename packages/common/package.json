@@ -1,0 +1,12 @@
+{
+  "name": "@repo/common",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "exports": {
+    "./common": "./index.ts"
+  },
+  "dependencies": {
+    "zod": "^3.24.3"
+  }
+}

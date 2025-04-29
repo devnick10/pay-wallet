@@ -8,16 +8,16 @@ import { P2PTransfer } from "@/actions/getP2pTransactions";
 
 interface TransactionsTableProps {
   transfers: P2PTransfer[];
-  currentUserId: string;
+  currentUserNumber: string;
   dateNone?:boolean;
 }
 
-export function TransactionsTable({ transfers, currentUserId ,dateNone}: TransactionsTableProps) {
+export function TransactionsTable({ transfers, currentUserNumber ,dateNone}: TransactionsTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<"all" | "sent" | "received">("all");
 
   const filteredTransfers = transfers.filter((transfer) => {
-    const isSent = transfer.fromUser.number === currentUserId;
+    const isSent = transfer.fromUser.number === currentUserNumber;
     const counterparty = isSent ? transfer.toUser : transfer.fromUser;
 
     // Search matches counterparty name, phone number, or transaction ID
@@ -71,7 +71,7 @@ export function TransactionsTable({ transfers, currentUserId ,dateNone}: Transac
           <TableBody>
             {filteredTransfers.length > 0 ? (
               filteredTransfers.map((transfer) => {
-                const isSent = transfer.fromUser.number === currentUserId;
+                const isSent = transfer.fromUser.number === currentUserNumber;
                 const counterparty = isSent ? transfer.toUser : transfer.fromUser;
                 const amountInRupees = transfer.amount / 100;
 
