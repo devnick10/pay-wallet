@@ -1,25 +1,27 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
-import Link from "next/link"
-import { ArrowLeft, CreditCard, Eye, EyeOff } from "lucide-react"
+import { verifyNumber } from "@/actions/otpVefications"
+import { OtpCard } from "@/components/OtpCard"
+import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ThemeToggle } from "@/components/ThemeToggle"
+import { ActionType } from "@/lib/utils"
+import { ArrowLeft, CreditCard, Eye, EyeOff } from "lucide-react"
 import { signIn } from "next-auth/react"
+import Link from "next/link"
+import { useState } from "react"
 import toast from "react-hot-toast"
-import { useRouter } from "next/navigation"
+
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [name, setName] = useState<string>("")
+  const [verify, setVerify] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(true)
 
-  const router = useRouter()
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -33,7 +35,8 @@ export default function LoginPage() {
         <ThemeToggle />
       </header>
       <main className="flex flex-1 items-center justify-center p-4 md:p-8">
-        <div className="mx-auto w-full max-w-md border border-slate-200 px-8 rounded-xl shadow-md py-6 space-y-6">
+        {/* SIGNIN CONTAINER */}
+        {!verify && <div className="mx-auto w-full max-w-md border border-slate-200 px-8 rounded-xl shadow-md py-6 space-y-6">
           <div className="flex flex-col items-center space-y-2 text-center">
             <div className="flex items-center gap-2">
               <CreditCard className="h-6 w-6 text-primary" />
@@ -92,43 +95,55 @@ export default function LoginPage() {
                 </Button>
               </div>
             </div>
-            <Button onClick={async () => {
+            <Button disabled={loading} onClick={async () => {
               if (!name.trim() || !phoneNumber.trim() || !password.trim()) {
                 toast.error("Please provide all fields");
                 return;
               }
+              setLoading(true);
+              const { success, message } = await verifyNumber({ phoneNumber, action: ActionType.SEND })
 
-              try {
-                const result = await signIn("credentials", {
-                  redirect: false,
-                  name,
-                  phone: phoneNumber,
-                  password,
-                  callbackUrl: "/dashboard"
-                });
-                
-                if (result?.error) {
-                  toast.error(result.error === "CredentialsSignin"
-                    ? "Invalid credentials"
-                    : result.error);
-                  return;
-                }
-
-                if (result?.url) {
-                  // Wait briefly to ensure session is set
-                  setTimeout(() => {
-                    toast.success("Sign in successful");
-                    router.push(result?.url!);
-                  }, 100);
-                } else {
-                  toast.error("Authentication failed - no redirect URL");
-                }
-              } catch (error) {
-                console.error("Sign in error:", error);
-                toast.error("An unexpected error occurred");
+              if (!success) {
+                return toast.error(message)
               }
+
+              if (success) {
+                toast.success(message)
+                try {
+                  const result = await signIn("credentials", {
+                    redirect: false,
+                    name,
+                    phone: phoneNumber,
+                    password,
+                  });
+
+                  if (result?.error) {
+                    toast.error(result.error === "CredentialsSignin"
+                      ? "Invalid credentials"
+                      : result.error);
+                    return;
+                  }
+
+                  if (result?.url) {
+                    // Wait briefly to ensure session is set
+                    setTimeout(() => {
+                      toast.success("Sign in successful");
+                      setVerify(true)
+                    }, 100);
+                  } else {
+                    toast.error("Authentication failed - no redirect URL");
+                  }
+
+                } catch (error) {
+                  console.error("Sign in error:", error);
+                  toast.error("An unexpected error occurred");
+                } finally {
+                  setLoading(false)
+                }
+              }
+              setLoading(false)
             }} className="w-full">
-              Sign In
+              {loading ? "Processing" : "Sign In"}
             </Button>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -144,7 +159,10 @@ export default function LoginPage() {
               </Link>
             </div>
           </div>
-        </div>
+        </div>}
+        {
+          verify && <OtpCard setVerify={setVerify} phoneNumber={phoneNumber} />
+        }
       </main>
     </div>
   )
