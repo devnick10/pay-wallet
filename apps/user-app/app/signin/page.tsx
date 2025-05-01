@@ -20,7 +20,6 @@ export default function LoginPage() {
   const [name, setName] = useState<string>("")
 
   const router = useRouter()
-
   return (
     <div className="flex min-h-screen flex-col">
       <header className="flex h-16 items-center justify-between border-b px-4 md:px-6">
