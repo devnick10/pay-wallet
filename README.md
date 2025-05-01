@@ -1,4 +1,4 @@
-# Paytm-like App  
+# Pay-wallet Paytm-like App  
 
 A scalable payment application built with **Turborepo**, featuring user and merchant services along with a dummy bank webhook.  
 
