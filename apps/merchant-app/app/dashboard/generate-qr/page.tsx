@@ -97,7 +97,7 @@ export default function GenerateQRPage() {
                 ) : (
                   <div className="flex h-64 w-64 items-center justify-center rounded-lg border-2 border-dashed">
                     <p className="text-center text-muted-foreground">
-                      Enter an amount and click "Generate QR Code" to create a payment QR code
+                      Enter an amount and click &quot;Generate QR Code&quot; to create a payment QR code
                     </p>
                   </div>
                 )}

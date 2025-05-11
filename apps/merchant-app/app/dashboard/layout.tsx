@@ -1,22 +1,21 @@
-import type React from "react";
-import Link from "next/link";
-import {
-  BarChart3,
-  Bell,
-  CreditCard,
-  DollarSign,
-  History,
-  Home,
-  LogOut,
-  Menu,
-  QrCode,
-  Settings,
-  Store,
-  User,
-} from "lucide-react";
+import { ThemeToggle } from "@/components/toggle-theme";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { ThemeToggle } from "@/components/toggle-theme";
+import {
+    BarChart3,
+    CreditCard,
+    DollarSign,
+    History,
+    Home,
+    LogOut,
+    Menu,
+    QrCode,
+    Settings,
+    Store,
+    User
+} from "lucide-react";
+import Link from "next/link";
+import type React from "react";
 
 const sidebarNavItems = [
   {
