@@ -2,9 +2,15 @@ import Link from "next/link"
 import { ArrowRight, BarChart3, CreditCard, DollarSign, Download, History, QrCode, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { DashboardToastWrapper } from "@/components/DashboardToastWrapper"
+import { Suspense } from "react"
 
-export default function MerchantDashboardPage() {
-  return (
+export default async function MerchantDashboardPage() {
+
+  return (<>
+    <Suspense fallback={null}>
+      <DashboardToastWrapper />
+    </Suspense>
     <div className="flex flex-col gap-6 p-4 md:gap-8 md:p-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Merchant Dashboard</h1>
@@ -158,5 +164,6 @@ export default function MerchantDashboardPage() {
         </Card>
       </div>
     </div>
+  </>
   )
 }

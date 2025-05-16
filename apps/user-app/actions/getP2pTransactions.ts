@@ -21,7 +21,7 @@ export interface P2PTransfer {
 
 export async function getP2pTransactions(): Promise<P2PTransfer[]> {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    if (!session?.user.id) {
         return [];
     }
     const txns = await prisma.p2PTransfer.findMany({
