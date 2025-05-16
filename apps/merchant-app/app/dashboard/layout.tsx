@@ -1,19 +1,22 @@
+"use client"
 import { ThemeToggle } from "@/components/toggle-theme";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { toast } from "@/hooks/use-toast";
 import {
-    BarChart3,
-    CreditCard,
-    DollarSign,
-    History,
-    Home,
-    LogOut,
-    Menu,
-    QrCode,
-    Settings,
-    Store,
-    User
+  BarChart3,
+  CreditCard,
+  DollarSign,
+  History,
+  Home,
+  LogOut,
+  Menu,
+  QrCode,
+  Settings,
+  Store,
+  User
 } from "lucide-react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import type React from "react";
 
@@ -94,6 +97,21 @@ export default function MerchantDashboardLayout({
               </nav>
               <div className="border-t p-4">
                 <Button
+                  onClick={async () => {
+                    try {
+                      await signOut();
+                      toast({
+                        title: "Success",
+                        description: "Signed out successfully",
+                      });
+                    } catch (error) {
+                      console.error("Sign out error:", error);
+                      toast({
+                        title: "Error",
+                        description: "Failed to sign out. Please try again.",
+                      });
+                    }
+                  }}
                   variant="destructive"
                   className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-white transition-colors hover:text-foreground"
                 >
@@ -148,6 +166,21 @@ export default function MerchantDashboardLayout({
             </nav>
             <div className="border-t p-4">
               <Button
+                onClick={async () => {
+                    try {
+                      await signOut();
+                      toast({
+                        title: "Success",
+                        description: "Signed out successfully",
+                      });
+                    } catch (error) {
+                      console.error("Sign out error:", error);
+                      toast({
+                        title: "Error",
+                        description: "Failed to sign out. Please try again.",
+                      });
+                    }
+                  }}
                 variant="destructive"
                 className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-white transition-colors hover:text-foreground"
               >

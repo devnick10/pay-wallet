@@ -32,7 +32,7 @@ export function OnRampTable({
     if (initialTransactions.length === 0) {
       loadTransactions();
     }
-  },[]);
+  },[initialTransactions]);
 
   const filteredTransactions = transactions.filter((transaction) => {
     const matchesSearch =
