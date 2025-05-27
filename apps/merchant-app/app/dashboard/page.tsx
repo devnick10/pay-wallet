@@ -1,6 +1,7 @@
 import { getTotalTransactions } from "@/actions/getTotalTransactions"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+<<<<<<< HEAD
 import { ArrowRight, BarChart3, Download, History, QrCode } from "lucide-react"
 import Link from "next/link"
 
@@ -9,6 +10,17 @@ export default async function MerchantDashboardPage() {
   const transactions = await getTotalTransactions()
 
   return (
+=======
+import { DashboardToastWrapper } from "@/components/DashboardToastWrapper"
+import { Suspense } from "react"
+
+export default async function MerchantDashboardPage() {
+
+  return (<>
+    <Suspense fallback={null}>
+      <DashboardToastWrapper />
+    </Suspense>
+>>>>>>> de32c7e474d9b01c7f237ed6b7e4d191aec7d93c
     <div className="flex flex-col gap-6 p-4 md:gap-8 md:p-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Merchant Dashboard</h1>
@@ -132,5 +144,6 @@ export default async function MerchantDashboardPage() {
         </Card>
       </div>
     </div>
+  </>
   )
 }

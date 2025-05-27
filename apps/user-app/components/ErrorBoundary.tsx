@@ -15,6 +15,7 @@ export default function ErrorBoundary({ err, reset }: { err: ErrorType, reset: (
             router.refresh()
             reset()
           })
+          console.error(err)
         }}>Try again</Button>
       </div>
     </div>

@@ -115,7 +115,7 @@ export default function LoginPage() {
                   // Wait briefly to ensure session is set
                   setTimeout(() => {
                     toast.success("Sign in successful");
-                    router.push(result?.url!);
+                    router.push(result.url as string);
                   }, 100);
                 } else {
                   toast.error("Authentication failed - no redirect URL");

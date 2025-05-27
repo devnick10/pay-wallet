@@ -28,7 +28,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn(params) {
       const { user, account } = params;
-
       if (account?.provider === "google") {
         try {
           if (!user.email) {
@@ -60,9 +59,22 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
+<<<<<<< HEAD
     async jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
+=======
+    async jwt({ token }) {
+      // Fetch the merchant from the database based on the email
+      if (token.email) {
+        const merchant = await prisma.merchant.findUnique({
+          where: { email: token.email }
+        });
+
+        if (merchant) {
+          token.sub = String(merchant.id);
+        }
+>>>>>>> de32c7e474d9b01c7f237ed6b7e4d191aec7d93c
       }
       return token;
     },
