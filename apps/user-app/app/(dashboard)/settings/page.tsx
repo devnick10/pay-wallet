@@ -73,7 +73,7 @@ export default function SettingsPage() {
             <div className="space-y-2">
               <Label htmlFor="fullName">Full Name</Label>
               <Input
-                value={user.name}
+                value={user.name || session.data?.user.name}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setUser(prev => ({ ...prev, name: e.target.value }))}
                 id="fullName" />
             </div>
@@ -84,6 +84,7 @@ export default function SettingsPage() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setUser(prev => ({ ...prev, email: e.target.value }))}
                 id="email"
                 type="email"
+                placeholder="example@gmail.com"
               />
             </div>
             <div className="space-y-2">

@@ -23,7 +23,7 @@ app.post("/hdfcWebhook", async (req, res) => {
             token
         }
     })
-           
+
     if (transactionStatus?.status == "Success") {
         res.json({
             message: "Invalid token"
@@ -39,6 +39,9 @@ app.post("/hdfcWebhook", async (req, res) => {
                     userId: Number(user_identifier)
                 },
                 data: {
+                    locked: {
+                        decrement: Number(amount)
+                    },
                     amount: {
                         increment: Number(amount)
                     }

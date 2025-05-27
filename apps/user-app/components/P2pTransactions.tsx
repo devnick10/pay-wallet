@@ -1,23 +1,9 @@
+import { P2PTransfer } from "@/actions/getP2pTransactions";
 import { authOptions } from "@/app/lib/authOptions";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ArrowUpRight, ArrowDownLeft } from "lucide-react";
 import { getServerSession } from "next-auth";
 
-interface P2PTransfer {
-  id: number;
-  amount: number;
-  timestamp: Date;
-  fromUser: {
-    id: number;
-    number?: string;
-    name: string | null;
-  };
-  toUser: {
-    id: number;
-    number?: string;
-    name: string | null;
-  };
-}
 
 export const P2pTransactions = async ({ transactions }: { transactions: P2PTransfer[] }) => {
   const session = await getServerSession(authOptions);
@@ -50,9 +36,8 @@ export const P2pTransactions = async ({ transactions }: { transactions: P2PTrans
           return (
             <div key={t.id} className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors">
               <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-full ${
-                  isSent ? 'bg-red-100 dark:bg-red-900/50' : 'bg-green-100 dark:bg-green-900/50'
-                }`}>
+                <div className={`p-2 rounded-full ${isSent ? 'bg-red-100 dark:bg-red-900/50' : 'bg-green-100 dark:bg-green-900/50'
+                  }`}>
                   {isSent ? (
                     <ArrowUpRight className="h-4 w-4 text-red-600 dark:text-red-400" />
                   ) : (
@@ -77,9 +62,8 @@ export const P2pTransactions = async ({ transactions }: { transactions: P2PTrans
                   </div>
                 </div>
               </div>
-              <div className={`font-semibold ${
-                isSent ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'
-              }`}>
+              <div className={`font-semibold ${isSent ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'
+                }`}>
                 {isSent ? '-' : '+'}₹{amount}
               </div>
             </div>

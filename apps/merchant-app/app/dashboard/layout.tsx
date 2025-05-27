@@ -1,144 +1,38 @@
-import { ThemeToggle } from "@/components/toggle-theme";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-    BarChart3,
-    CreditCard,
-    DollarSign,
-    History,
-    Home,
-    LogOut,
-    Menu,
-    QrCode,
-    Settings,
-    Store,
-    User
-} from "lucide-react";
-import Link from "next/link";
-import type React from "react";
+"use client"
 
-const sidebarNavItems = [
-  {
-    title: "Dashboard",
-    href: "/dashboard",
-    icon: Home,
-  },
-  {
-    title: "Generate QR",
-    href: "/dashboard/generate-qr",
-    icon: QrCode,
-  },
-  {
-    title: "Transactions",
-    href: "/dashboard/transactions",
-    icon: History,
-  },
-  {
-    title: "Analytics",
-    href: "/dashboard/analytics",
-    icon: BarChart3,
-  },
-  {
-    title: "Payouts",
-    href: "/dashboard/payouts",
-    icon: DollarSign,
-  },
-  {
-    title: "Store Settings",
-    href: "/dashboard/store",
-    icon: Store,
-  },
-  {
-    title: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
-];
+import { sidebarNavItems } from "@/lib/utils"
+import DashboardNav from "@/components/DashboardNav"
+import { Button } from "@/components/ui/button"
+import { LogOut } from "lucide-react"
+import { signOut } from "next-auth/react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import type React from "react"
+import toast from "react-hot-toast"
 
-export default function MerchantDashboardLayout({
+export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
+  const pathname = usePathname()
+
   return (
-    <div className="flex min-h-screen flex-col">
-      {/* Header */}
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-        {/* Mobile Menu Button */}
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="md:hidden">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle Menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-72 sm:max-w-xs">
-            <div className="flex h-full flex-col">
-              <div className="flex items-center gap-2 border-b p-4">
-                <CreditCard className="h-6 w-6 text-primary" />
-                <span className="text-lg font-bold">PayWallet Business</span>
-              </div>
-              <nav className="flex-1 overflow-y-auto py-2">
-                <div className="grid gap-1 px-2">
-                  {sidebarNavItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-muted"
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {item.title}
-                    </Link>
-                  ))}
-                </div>
-              </nav>
-              <div className="border-t p-4">
-                <Button
-                  variant="destructive"
-                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-white transition-colors hover:text-foreground"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </Button>
-              </div>
-            </div>
-          </SheetContent>
-        </Sheet>
-
-        {/* Mobile Logo */}
-        <div className="flex items-center gap-2 md:hidden">
-          <CreditCard className="h-6 w-6 text-primary" />
-          <span className="text-md font-bold md:text-lg">PayWallet Business</span>
-        </div>
-
-        {/* Desktop Logo */}
-        <div className="hidden items-center gap-2 md:flex">
-          <CreditCard className="h-6 w-6 text-primary" />
-          <span className="text-lg font-bold">PayWallet Business</span>
-        </div>
-
-        {/* Right Side Icons */}
-        <div className="ml-auto flex items-center gap-4">
-          <ThemeToggle />
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <User className="h-5 w-5" />
-            <span className="sr-only">Profile</span>
-          </Button>
-        </div>
-      </header>
-
-      {/* Main Content Area */}
-      <div className="flex flex-1">
-        {/* Desktop Sidebar */}
+    <div className="flex h-dvh flex-col">
+      <DashboardNav />
+      <div className="flex flex-1 overflow-hidden">
         <aside className="hidden w-64 shrink-0 border-r md:block">
-          <div className="flex h-[calc(100vh-4rem)] flex-col">
+          <div className="flex h-full flex-col">
             <nav className="flex-1 overflow-y-auto py-4">
               <div className="grid gap-1 px-2">
                 {sidebarNavItems.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
+                    className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${pathname === item.href
+                      ? "bg-primary text-primary-foreground"
+                      : "hover:bg-muted"
+                      }`}
                   >
                     <item.icon className="h-4 w-4" />
                     {item.title}
@@ -147,22 +41,28 @@ export default function MerchantDashboardLayout({
               </div>
             </nav>
             <div className="border-t p-4">
-              <Button
-                variant="destructive"
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-white transition-colors hover:text-foreground"
-              >
+              <div className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
                 <LogOut className="h-4 w-4" />
-                Logout
-              </Button>
+                <Button
+                  variant="destructive"
+                  className="w-full"
+                  onClick={() => {
+                    signOut({ callbackUrl: "/" })
+                    toast.success("Signout successfully")
+                  }}
+                >
+                  Logout
+                </Button>
+              </div>
             </div>
           </div>
         </aside>
-
-        {/* Scrollable Main Content */}
-        <main className="flex-1 overflow-y-auto h-[calc(100vh-4rem)]">
-          <div className="p-4 md:p-6">{children}</div>
+        <main className="flex-1 overflow-y-auto">
+          <div className="h-full p-4 md:p-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>
-  );
+  )
 }
