@@ -1,3 +1,4 @@
+"use server"
 import { authOptions } from "@/app/lib/authOptions";
 import prisma from "@repo/db/client";
 import { getServerSession } from "next-auth";
@@ -7,7 +8,7 @@ export async function getBalance() {
     try {
         const balance = await prisma.balance.findUnique({
             where: {
-                merchantId: Number(session?.user?.id)
+                userId: Number(session?.user?.id)
             }
         });
         return {

@@ -1,40 +1,37 @@
-import { Calendar, Download, Wallet } from "lucide-react"
+"use client"
+import { getBalance } from "@/actions/getBalance"
+import { getPayout, Payouts } from "@/actions/getPayouts"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { toast } from "@/hooks/use-toast"
+import { Calendar, Download, Wallet } from "lucide-react"
+import { useEffect, useMemo, useState } from "react"
 
 export default function PayoutsPage() {
-  // Mock data for payouts
-  const payouts = [
-    {
-      id: "PO123456",
-      date: "2023-04-15",
-      amount: 12450,
-      status: "completed",
-      account: "HDFC Bank ****4321",
-    },
-    {
-      id: "PO123457",
-      date: "2023-04-08",
-      amount: 9870,
-      status: "completed",
-      account: "HDFC Bank ****4321",
-    },
-    {
-      id: "PO123458",
-      date: "2023-04-01",
-      amount: 11250,
-      status: "completed",
-      account: "HDFC Bank ****4321",
-    },
-    {
-      id: "PO123459",
-      date: "2023-03-25",
-      amount: 8750,
-      status: "completed",
-      account: "HDFC Bank ****4321",
-    },
-  ]
+  const [payouts, setPayouts] = useState<Payouts[]>([])
+  const [balance, setBalance] = useState<number>(0)
+  useEffect(() => {
+    Promise.all([
+      getPayout(),
+      getBalance()
+    ]).then((data) => {
+      const [payouts, balance] = data;
+      setPayouts(payouts)
+      setBalance(balance.amount)
+    }).catch((err) => {
+      console.error(err);
+      setBalance(0);
+      setPayouts([]);
+      toast({
+        description: "Something went wrong!"
+      })
+    })
+  }, [])
+
+  const totalPayout = useMemo(() => {
+    return payouts.reduce((sum, pay) => sum + pay.amount, 0)
+  }, [payouts])
 
   return (
     <div className="flex flex-col gap-6 p-4 md:gap-8 md:p-8">
@@ -43,7 +40,7 @@ export default function PayoutsPage() {
         <p className="text-muted-foreground">Manage and track your settlement payouts.</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader className="flex flex-row items-center gap-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
@@ -55,22 +52,7 @@ export default function PayoutsPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">₹15,780.00</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-              <Wallet className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <CardTitle>Next Payout</CardTitle>
-              <CardDescription>Scheduled</CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">₹15,780.00</p>
-            <p className="text-sm text-muted-foreground">On April 22, 2023</p>
+            <p className="text-3xl font-bold">₹{balance}</p>
           </CardContent>
         </Card>
         <Card>
@@ -84,7 +66,7 @@ export default function PayoutsPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">₹42,320.00</p>
+            <p className="text-3xl font-bold">₹{totalPayout}</p>
           </CardContent>
         </Card>
       </div>
@@ -118,19 +100,24 @@ export default function PayoutsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {payouts.map((payout) => (
+              {payouts.length > 0 ? payouts.map((payout) => (
                 <TableRow key={payout.id}>
                   <TableCell className="font-medium">{payout.id}</TableCell>
-                  <TableCell>{payout.date}</TableCell>
+                  <TableCell>{payout.startTime.toLocaleDateString()}</TableCell>
                   <TableCell>₹{payout.amount.toLocaleString("en-IN")}</TableCell>
-                  <TableCell>{payout.account}</TableCell>
+                  <TableCell>{payout.provider}</TableCell>
                   <TableCell>
                     <div className="flex w-fit items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900 dark:text-green-300">
-                      Completed
+                      {payout.status}
                     </div>
                   </TableCell>
                 </TableRow>
-              ))}
+              )) : (<TableRow>
+                <TableCell colSpan={7} className="h-24 text-center">
+                  No payouts found.
+                </TableCell>
+              </TableRow>)
+              }
             </TableBody>
           </Table>
         </CardContent>

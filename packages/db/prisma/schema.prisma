@@ -17,6 +17,7 @@ model User {
   Balance           Balance?
   sentTransfers     P2PTransfer[]       @relation("FromUserRelation")
   receivedTransfers P2PTransfer[]       @relation("ToUserRelation")
+  payouts           Payout[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
 }
@@ -29,6 +30,7 @@ model Merchant {
   Balance           Balance?
   receivedTransfers P2PTransfer[]       @relation("ToMerchantRelation")
   OnRampTransaction OnRampTransaction[]
+  payouts           Payout[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
 }
@@ -46,6 +48,19 @@ model P2PTransfer {
 }
 
 model OnRampTransaction {
+  id         Int          @id @default(autoincrement())
+  status     OnRampStatus
+  token      String       @unique
+  provider   String
+  amount     Int
+  startTime  DateTime     @default(now())
+  userId     Int
+  user       User         @relation(fields: [userId], references: [id])
+  merchantId Int?
+  merchant   Merchant?    @relation(fields: [merchantId], references: [id])
+}
+
+model Payout {
   id         Int          @id @default(autoincrement())
   status     OnRampStatus
   token      String       @unique
