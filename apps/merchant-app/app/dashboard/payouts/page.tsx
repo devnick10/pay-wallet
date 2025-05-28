@@ -1,16 +1,20 @@
 "use client"
 import { getBalance } from "@/actions/getBalance"
 import { getPayout, Payouts } from "@/actions/getPayouts"
+import { PayoutCard } from "@/components/PayoutCard"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { toast } from "@/hooks/use-toast"
 import { Calendar, Download, Wallet } from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
-
+import { useEffect, useState } from "react"
+interface Balance {
+  amount:number;
+  locked:number
+}
 export default function PayoutsPage() {
   const [payouts, setPayouts] = useState<Payouts[]>([])
-  const [balance, setBalance] = useState<number>(0)
+  const [balance, setBalance] = useState<Balance>({amount:0,locked:0})
   useEffect(() => {
     Promise.all([
       getPayout(),
@@ -18,20 +22,16 @@ export default function PayoutsPage() {
     ]).then((data) => {
       const [payouts, balance] = data;
       setPayouts(payouts)
-      setBalance(balance.amount)
+      setBalance(balance)
     }).catch((err) => {
       console.error(err);
-      setBalance(0);
+      setBalance({amount:0,locked:0});
       setPayouts([]);
       toast({
         description: "Something went wrong!"
       })
     })
   }, [])
-
-  const totalPayout = useMemo(() => {
-    return payouts.reduce((sum, pay) => sum + pay.amount, 0)
-  }, [payouts])
 
   return (
     <div className="flex flex-col gap-6 p-4 md:gap-8 md:p-8">
@@ -41,34 +41,40 @@ export default function PayoutsPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-              <Wallet className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <CardTitle>Available Balance</CardTitle>
-              <CardDescription>Ready for payout</CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">₹{balance}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-              <Wallet className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <CardTitle>Total Payouts</CardTitle>
-              <CardDescription>All time</CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">₹{totalPayout}</p>
-          </CardContent>
-        </Card>
+        <div className="h-full">
+          <PayoutCard />
+        </div>
+
+        <div className="grid gap-6 h-full">
+          <Card >
+            <CardHeader className="flex flex-row items-center gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <Wallet className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <CardTitle>Available Balance</CardTitle>
+                <CardDescription>Ready for payout</CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">₹{(balance.amount / 100).toLocaleString("en-IN")}</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <Wallet className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <CardTitle>Locked Balance</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">₹{(balance.locked / 100).toLocaleString("en-IN")}</p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       <Card>
@@ -104,7 +110,7 @@ export default function PayoutsPage() {
                 <TableRow key={payout.id}>
                   <TableCell className="font-medium">{payout.id}</TableCell>
                   <TableCell>{payout.startTime.toLocaleDateString()}</TableCell>
-                  <TableCell>₹{payout.amount.toLocaleString("en-IN")}</TableCell>
+                  <TableCell>₹{(payout.amount / 100).toLocaleString("en-IN")}</TableCell>
                   <TableCell>{payout.provider}</TableCell>
                   <TableCell>
                     <div className="flex w-fit items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900 dark:text-green-300">

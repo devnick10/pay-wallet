@@ -40,14 +40,25 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (!existingUser) {
-            const newUser = await prisma.merchant.create({
-              data: {
-                email: user.email,
-                auth_type: "Google",
-                name: user.name || "",
-              }
-            });
-            user.id = String(newUser.id)
+            const merchant = await prisma.$transaction(async () => {
+              const newMerchant = await prisma.merchant.create({
+                data: {
+                  email: user.email as string,
+                  auth_type: "Google",
+                  name: user.name || "",
+                }
+              });
+              await prisma.balance.create({
+                data: {
+                  amount: 0,
+                  locked: 0,
+                  merchantId: newMerchant.id,
+                }
+              })
+              return newMerchant
+            })
+
+            user.id = String(merchant.id)
             return true
           }
           user.id = String(existingUser.id)

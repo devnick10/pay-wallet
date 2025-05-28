@@ -11,7 +11,6 @@ export interface Payouts {
     provider: string;
     amount: number;
     startTime: Date;
-    userId: number;
     merchantId: number | null;
 }
 
