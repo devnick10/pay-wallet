@@ -67,8 +67,8 @@ model Payout {
   provider   String
   amount     Int
   startTime  DateTime     @default(now())
-  userId     Int
-  user       User         @relation(fields: [userId], references: [id])
+  userId     Int?
+  user       User?         @relation(fields: [userId], references: [id])
   merchantId Int?
   merchant   Merchant?    @relation(fields: [merchantId], references: [id])
 }
