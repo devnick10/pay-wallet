@@ -13,7 +13,6 @@ interface TransactionsTableProps {
 
 export function TransactionsTable({ transfers, dateNone }: TransactionsTableProps) {
     const [searchTerm, setSearchTerm] = useState("");
-    const [filterType, setFilterType] = useState<"all" | "sent" | "received">("all");
 
     const formatDate = (date: Date) => {
         return new Intl.DateTimeFormat("en-IN", {

@@ -8,7 +8,6 @@ import { QrCode } from "lucide-react"
 import { useEffect, useState } from "react"
 
 export default function TransactionsPage() {
-  const [searchTerm, setSearchTerm] = useState("")
   const [transactions, setTransactions] = useState<P2PTransfer[]>([])
 
   useEffect(() => {
@@ -23,17 +22,17 @@ export default function TransactionsPage() {
     })
   }, [])
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return new Intl.DateTimeFormat("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    }).format(date)
-  }
+  // const formatDate = (dateString: string) => {
+  //   const date = new Date(dateString)
+  //   return new Intl.DateTimeFormat("en-IN", {
+  //     day: "numeric",
+  //     month: "short",
+  //     year: "numeric",
+  //     hour: "numeric",
+  //     minute: "numeric",
+  //     hour12: true,
+  //   }).format(date)
+  // }
 
   // Calculate total amount
   const totalAmount = transactions.reduce((sum, transaction) => sum + transaction.amount, 0)

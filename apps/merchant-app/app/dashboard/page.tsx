@@ -2,7 +2,7 @@ import { getTotalTransactions } from "@/actions/getTotalTransactions"
 import { TransactionsTable } from "@/components/TransactionTable"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight, BarChart3, Download, History, QrCode } from "lucide-react"
+import { BarChart3, Download, History, QrCode } from "lucide-react"
 import Link from "next/link"
 
 export default async function MerchantDashboardPage() {
