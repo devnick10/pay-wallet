@@ -1,4 +1,5 @@
 import { getTotalTransactions } from "@/actions/getTotalTransactions"
+import { TransactionsTable } from "@/components/TransactionTable"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, BarChart3, Download, History, QrCode } from "lucide-react"
@@ -22,7 +23,7 @@ export default async function MerchantDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="pl-6 text-2xl font-bold">{transactions.length}</div>
-            <p className="text-xs text-muted-foreground">+8 from yesterday</p>
+            {/* <p className="text-xs text-muted-foreground">+8 from yesterday</p> */}
           </CardContent>
         </Card>
       </div>
@@ -33,63 +34,10 @@ export default async function MerchantDashboardPage() {
             <CardDescription>Your recent payment activities</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 rounded-lg border p-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <ArrowRight className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Payment from Customer #1234</p>
-                  <p className="text-xs text-muted-foreground">Today, 2:34 PM</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-green-500">+₹500.00</p>
-                  <p className="text-xs text-muted-foreground">QR Code Payment</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 rounded-lg border p-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <ArrowRight className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Payment from Customer #5678</p>
-                  <p className="text-xs text-muted-foreground">Today, 1:15 PM</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-green-500">+₹1,200.00</p>
-                  <p className="text-xs text-muted-foreground">QR Code Payment</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 rounded-lg border p-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <ArrowRight className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Payment from Customer #9012</p>
-                  <p className="text-xs text-muted-foreground">Today, 11:30 AM</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-green-500">+₹350.00</p>
-                  <p className="text-xs text-muted-foreground">QR Code Payment</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 rounded-lg border p-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <ArrowRight className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Payment from Customer #3456</p>
-                  <p className="text-xs text-muted-foreground">Today, 10:15 AM</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-green-500">+₹780.00</p>
-                  <p className="text-xs text-muted-foreground">QR Code Payment</p>
-                </div>
-              </div>
-            </div>
+            <TransactionsTable transfers={transactions} />
           </CardContent>
           <CardFooter>
-            <Link href="/merchant/dashboard/transactions">
+            <Link href="/dashboard/transactions">
               <Button variant="outline" size="sm">
                 View All Transactions
               </Button>
@@ -103,25 +51,25 @@ export default async function MerchantDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
-              <Link href="/merchant/dashboard/generate-qr">
+              <Link href="/dashboard/generate-qr">
                 <div className="flex flex-col items-center justify-center rounded-lg border p-4 hover:bg-muted">
                   <QrCode className="mb-2 h-6 w-6 text-primary" />
                   <span className="text-sm font-medium">Generate QR</span>
                 </div>
               </Link>
-              <Link href="/merchant/dashboard/transactions">
+              <Link href="/dashboard/transactions">
                 <div className="flex flex-col items-center justify-center rounded-lg border p-4 hover:bg-muted">
                   <History className="mb-2 h-6 w-6 text-primary" />
                   <span className="text-sm font-medium">Transactions</span>
                 </div>
               </Link>
-              <Link href="/merchant/dashboard/analytics">
+              <Link href="/dashboard/analytics">
                 <div className="flex flex-col items-center justify-center rounded-lg border p-4 hover:bg-muted">
                   <BarChart3 className="mb-2 h-6 w-6 text-primary" />
                   <span className="text-sm font-medium">Analytics</span>
                 </div>
               </Link>
-              <Link href="/merchant/dashboard/transactions">
+              <Link href="/dashboard/transactions">
                 <div className="flex flex-col items-center justify-center rounded-lg border p-4 hover:bg-muted">
                   <Download className="mb-2 h-6 w-6 text-primary" />
                   <span className="text-sm font-medium">Download Report</span>
