@@ -8,13 +8,36 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { updateProfile } from "@/actions/updateProfile"
+import { toast } from "@/hooks/use-toast"
+import { useSession } from "next-auth/react"
 
 export default function MerchantSettingsPage() {
   const [isLoading, setIsLoading] = useState(false)
+  const [personalInfo, setPersonalInfo] = useState({ name: "", email: "", number: "" })
+  const session = useSession()
+  const updatePersonalInfo = async () => {
+    setIsLoading(true)
+    try {
+      const { success } = await updateProfile(personalInfo)
+      if (success) {
+        toast({
+          description: "Profile update successfully"
+        })
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        description: "Internal server error"
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleSave = () => {
-    setIsLoading(true)
     // Simulate API call
+    setIsLoading(false)
     setTimeout(() => {
       setIsLoading(false)
       alert("Settings saved successfully!")
@@ -59,19 +82,31 @@ export default function MerchantSettingsPage() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Full Name</Label>
-                  <Input id="fullName" defaultValue="Ananya Desai" />
+                  <Input id="fullName"
+                    placeholder={session.data?.user.name}
+                    onChange={(e) => (
+                      setPersonalInfo(prev => ({ ...prev, name: e.target.value }))
+                    )} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
-                  <Input id="email" type="email" defaultValue="ananya@cafesunshine.com" />
+                  <Input id="email" type="email"
+                    placeholder={session.data?.user.email}
+                    onChange={(e) => (
+                      setPersonalInfo(prev => ({ ...prev, email: e.target.value }))
+                    )} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" defaultValue="9876543210" />
+                  <Input id="phone" 
+                    placeholder={"1542369871"}
+                  onChange={(e) => (
+                    setPersonalInfo(prev => ({ ...prev, number: e.target.value }))
+                  )} />
                 </div>
               </CardContent>
               <CardFooter>
-                <Button onClick={handleSave} disabled={isLoading} className="ml-auto">
+                <Button onClick={updatePersonalInfo} disabled={isLoading} className="ml-auto">
                   {isLoading ? "Saving..." : "Save Changes"}
                 </Button>
               </CardFooter>

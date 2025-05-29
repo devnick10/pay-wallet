@@ -26,6 +26,7 @@ model Merchant {
   id                Int                 @id @default(autoincrement())
   email             String              @unique
   name              String?
+  number            String?
   auth_type         AuthType
   Balance           Balance?
   receivedTransfers P2PTransfer[]       @relation("ToMerchantRelation")
