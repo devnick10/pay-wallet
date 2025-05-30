@@ -41,3 +41,9 @@ export interface StoreData {
   description: string;
   category: StoreCategory;
 }
+
+
+export interface RevenueData {
+  data: { timestamp: string; amount: number }[]
+  success: boolean
+}

@@ -23,18 +23,6 @@ export default function TransactionsPage() {
     })
   }, [])
 
-  // const formatDate = (dateString: string) => {
-  //   const date = new Date(dateString)
-  //   return new Intl.DateTimeFormat("en-IN", {
-  //     day: "numeric",
-  //     month: "short",
-  //     year: "numeric",
-  //     hour: "numeric",
-  //     minute: "numeric",
-  //     hour12: true,
-  //   }).format(date)
-  // }
-
   // Calculate total amount
   const totalAmount = transactions.reduce((sum, transaction) => sum + transaction.amount, 0)
 
