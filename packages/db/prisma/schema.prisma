@@ -34,18 +34,19 @@ model Merchant {
   payouts           Payout[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
+  Store             Store[]
 }
 
 model P2PTransfer {
-  id             Int       @id @default(autoincrement())
-  amount         Int
-  timestamp      DateTime  @default(now())
-  fromUserId     Int
-  fromUser       User      @relation("FromUserRelation", fields: [fromUserId], references: [id])
-  toUserId       Int?
-  toUser         User?     @relation("ToUserRelation", fields: [toUserId], references: [id])
-  toMerchantId   Int?
-  toMerchant     Merchant? @relation("ToMerchantRelation", fields: [toMerchantId], references: [id])
+  id           Int       @id @default(autoincrement())
+  amount       Int
+  timestamp    DateTime  @default(now())
+  fromUserId   Int
+  fromUser     User      @relation("FromUserRelation", fields: [fromUserId], references: [id])
+  toUserId     Int?
+  toUser       User?     @relation("ToUserRelation", fields: [toUserId], references: [id])
+  toMerchantId Int?
+  toMerchant   Merchant? @relation("ToMerchantRelation", fields: [toMerchantId], references: [id])
 }
 
 model OnRampTransaction {
@@ -69,19 +70,29 @@ model Payout {
   amount     Int
   startTime  DateTime     @default(now())
   userId     Int?
-  user       User?         @relation(fields: [userId], references: [id])
+  user       User?        @relation(fields: [userId], references: [id])
   merchantId Int?
   merchant   Merchant?    @relation(fields: [merchantId], references: [id])
 }
 
 model Balance {
-  id         Int      @id @default(autoincrement())
-  userId     Int?     @unique
-  merchantId Int?     @unique
-  amount     Int      @default(0)
-  locked     Int      @default(0)
-  user       User?    @relation(fields: [userId], references: [id])
+  id         Int       @id @default(autoincrement())
+  userId     Int?      @unique
+  merchantId Int?      @unique
+  amount     Int       @default(0)
+  locked     Int       @default(0)
+  user       User?     @relation(fields: [userId], references: [id])
   merchant   Merchant? @relation(fields: [merchantId], references: [id])
+}
+
+model Store {
+  id          Int           @id @default(autoincrement())
+  name        String
+  description String
+  category    StoreCategory
+  logo        String?
+  merchantId  Int           @unique
+  merchant    Merchant      @relation(fields: [merchantId], references: [id])
 }
 
 enum AuthType {
@@ -93,4 +104,13 @@ enum OnRampStatus {
   Success
   Failure
   Processing
+}
+
+enum StoreCategory {
+  Food
+  Retail
+  Services
+  Grocery
+  Electronics
+  Other
 }
