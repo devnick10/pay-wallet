@@ -1,11 +1,12 @@
 "use client"
 import { getBalance } from "@/actions/getBalance"
-import { getPayout, Payouts } from "@/actions/getPayouts"
+import { getPayout } from "@/actions/getPayouts"
 import { PayoutCard } from "@/components/PayoutCard"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { toast } from "@/hooks/use-toast"
+import { Payouts } from "@/lib/types"
 import { Calendar, Download, Wallet } from "lucide-react"
 import { useEffect, useState } from "react"
 interface Balance {

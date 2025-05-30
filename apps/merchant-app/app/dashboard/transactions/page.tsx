@@ -1,9 +1,10 @@
 "use client"
 
-import { getTotalTransactions, P2PTransfer } from "@/actions/getTotalTransactions"
+import { getTotalTransactions } from "@/actions/getTotalTransactions"
 import { TransactionsTable } from "@/components/TransactionTable"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from "@/hooks/use-toast"
+import { P2PTransfer } from "@/lib/types"
 import { QrCode } from "lucide-react"
 import { useEffect, useState } from "react"
 

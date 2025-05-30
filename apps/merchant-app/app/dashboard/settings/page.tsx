@@ -8,13 +8,14 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "@/hooks/use-toast"
+import { UpdateMerchantData } from "@/lib/types"
 import { CreditCard, Save, User, Wallet } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useState } from "react"
 
 export default function MerchantSettingsPage() {
   const [isLoading, setIsLoading] = useState(false)
-  const [personalInfo, setPersonalInfo] = useState({ name: "", email: "", number: "" })
+  const [personalInfo, setPersonalInfo] = useState<UpdateMerchantData>({ name: "", email: "", number: "" })
   const session = useSession()
 
   const updatePersonalInfo = async () => {

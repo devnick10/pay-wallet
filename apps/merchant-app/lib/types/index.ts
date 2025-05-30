@@ -9,6 +9,24 @@ export interface P2PTransfer {
     };
 }
 
+type OnRampStatus = "Success" | "Failure" | "Processing"
+
+export interface Payouts {
+    id: number;
+    status: OnRampStatus;
+    token: string;
+    provider: string;
+    amount: number;
+    startTime: Date;
+    merchantId: number | null;
+}
+
+export interface UpdateMerchantData {
+    name?: string;
+    email?: string;
+    number?: string;
+}
+
 export enum StoreCategory {
   FOOD = "Food",
   RETAIL = "Retail",

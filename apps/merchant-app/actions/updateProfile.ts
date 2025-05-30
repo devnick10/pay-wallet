@@ -1,12 +1,8 @@
 "use server"
+import { UpdateMerchantData } from "@/lib/types";
 import prisma from "@repo/db/client";
 import { getServerSession } from "next-auth"
 
-interface UpdateMerchantData {
-    name?: string;
-    email?: string;
-    number?: string;
-}
 export const updateProfile = async (data: UpdateMerchantData) => {
     const session = await getServerSession()
     try {

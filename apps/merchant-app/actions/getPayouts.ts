@@ -1,18 +1,8 @@
 "use server"
 import { authOptions } from "@/app/lib/authOptions"
+import { Payouts } from "@/lib/types"
 import prisma from "@repo/db/client"
 import { getServerSession } from "next-auth"
-type OnRampStatus = "Success" | "Failure" | "Processing"
-
-export interface Payouts {
-    id: number;
-    status: OnRampStatus;
-    token: string;
-    provider: string;
-    amount: number;
-    startTime: Date;
-    merchantId: number | null;
-}
 
 export const getPayout = async (): Promise<Payouts[]> => {
     const session = await getServerSession(authOptions)

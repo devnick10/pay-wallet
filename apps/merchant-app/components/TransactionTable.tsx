@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ArrowDownLeft } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { SearchBar } from "./SearchBar";
-import { P2PTransfer } from "@/actions/getTotalTransactions";
+import { P2PTransfer } from "@/lib/types";
 
 interface TransactionsTableProps {
     transfers: P2PTransfer[];
