@@ -1,23 +1,9 @@
 "use server"
 import { authOptions } from "@/app/lib/authOptions";
+import { P2PTransfer } from "@/lib/types";
 import prisma from "@repo/db/client";
 import { getServerSession } from "next-auth";
 
-export interface P2PTransfer {
-    id: number;
-    amount: number;
-    timestamp: Date;
-    fromUser: {
-        id: number;
-        number?: string;
-        name: string | null;
-    };
-    toUser: {
-        id: number | undefined;
-        number?: string;
-        name: string | undefined;
-    };
-}
 
 export async function getP2pTransactions(): Promise<P2PTransfer[]> {
     const session = await getServerSession(authOptions);

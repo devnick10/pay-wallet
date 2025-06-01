@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 type OnRampStatus = "Success" | "Failure" | "Processing"
+
 export const OnRampTransactions = ({
     transactions
 }: {

@@ -1,6 +1,6 @@
-import { P2PTransfer } from "@/actions/getP2pTransactions";
 import { authOptions } from "@/app/lib/authOptions";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { P2PTransfer } from "@/lib/types";
 import { ArrowUpRight, ArrowDownLeft } from "lucide-react";
 import { getServerSession } from "next-auth";
 

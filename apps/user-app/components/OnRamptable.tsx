@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { getOnRampTransactions, OnRampTransaction } from "@/actions/getOnRampTransactions";
+import { getOnRampTransactions} from "@/actions/getOnRampTransactions";
 import { SearchBar } from "@/components/SearchBar"; 
+import { OnRampTransaction } from "@/lib/types";
 
 interface OnRampTableProps {
   transactions?: OnRampTransaction[];
