@@ -1,9 +1,11 @@
 import TransactionsPage from '@/components/TransactionsPage'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 function page() {
   return (
-    <TransactionsPage/>
+    <Suspense>
+      <TransactionsPage/>
+    </Suspense>
   )
 }
 

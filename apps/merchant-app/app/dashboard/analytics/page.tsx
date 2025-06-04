@@ -1,8 +1,11 @@
 import Analytics from '@/components/AnalyticsPage'
+import { Suspense } from 'react'
 
 const page = () => {
   return (
-    <Analytics/>
+    <Suspense>
+      <Analytics />
+    </Suspense>
   )
 }
 
