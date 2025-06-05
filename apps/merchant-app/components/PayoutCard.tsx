@@ -18,7 +18,7 @@ export const PayoutCard = () => {
     const [amount, setAmount] = useState<number>();
     const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
     const [isLoading, setIsLoading] = useState(false);
-
+    
     const handlePayout = async () => {
         if (!amount || !provider) return;
 

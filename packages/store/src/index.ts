@@ -1,5 +1,4 @@
+export { useDispatch } from "react-redux";
 export { Provider as StateProvider } from "react-redux";
-export { default as store } from "./store/store";
-export { useBalance } from "./hooks/useBalance";
-export type { RootState, AppDispatch } from "./store/store";
-export { setBalance, incrementBalance, decrementBalance } from "./store/balanceSlice";
+export { default as merchantStore } from "./store/merchantStore/store";
+export { default as userStore } from "./store/userStore/store";

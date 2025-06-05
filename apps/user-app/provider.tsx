@@ -1,10 +1,10 @@
 "use client"
-import { StateProvider, store } from "@repo/store/baclance";
+import { StateProvider, userStore } from "@repo/store/utils";
 import { SessionProvider } from "next-auth/react";
 export const Provider = ({ children }: { children: React.ReactNode }) => {
-    return <StateProvider store={store}>
+    return <StateProvider store={userStore}>
         <SessionProvider>
-                {children}
+            {children}
         </SessionProvider>
     </StateProvider>
 }

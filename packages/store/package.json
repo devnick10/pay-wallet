@@ -6,7 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "exports": {
-    "./baclance": "./src/index.ts"
+    "./merchant": "./src/merchant.ts",
+    "./user": "./src/user.ts",
+    "./utils":"./src/index.ts"
   },
   "keywords": [],
   "author": "",

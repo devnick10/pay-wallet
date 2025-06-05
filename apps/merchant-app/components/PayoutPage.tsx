@@ -7,15 +7,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { toast } from "@/hooks/use-toast"
 import { Payouts } from "@/lib/types"
+import { setamount, useBalance, setlockedamout } from "@repo/store/merchant"
+import { useDispatch } from "@repo/store/utils"
 import { Calendar, Download, Wallet } from "lucide-react"
 import { useEffect, useState } from "react"
-interface Balance {
-  amount:number;
-  locked:number
-}
+
 export default function PayoutsPage() {
   const [payouts, setPayouts] = useState<Payouts[]>([])
-  const [balance, setBalance] = useState<Balance>({amount:0,locked:0})
+  const dispatch = useDispatch()
+  const { locked, balance } = useBalance();
+
   useEffect(() => {
     Promise.all([
       getPayout(),
@@ -23,10 +24,10 @@ export default function PayoutsPage() {
     ]).then((data) => {
       const [payouts, balance] = data;
       setPayouts(payouts)
-      setBalance(balance)
+      dispatch(setamount(balance.amount))
+      dispatch(setlockedamout(balance.locked))
     }).catch((err) => {
       console.error(err);
-      setBalance({amount:0,locked:0});
       setPayouts([]);
       toast({
         description: "Something went wrong!"
@@ -58,7 +59,7 @@ export default function PayoutsPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold">₹{(balance.amount / 100).toLocaleString("en-IN")}</p>
+              <p className="text-3xl font-bold">₹{(balance / 100).toLocaleString("en-IN")}</p>
             </CardContent>
           </Card>
 
@@ -72,7 +73,7 @@ export default function PayoutsPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold">₹{(balance.locked / 100).toLocaleString("en-IN")}</p>
+              <p className="text-3xl font-bold">₹{(locked / 100).toLocaleString("en-IN")}</p>
             </CardContent>
           </Card>
         </div>
