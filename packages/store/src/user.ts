@@ -1,4 +1,4 @@
-export { useBalance } from "./hooks/useUserBlance";
+export { useBalance } from "./hooks/userhooks/useBalance";
 
 export {
     setamount,

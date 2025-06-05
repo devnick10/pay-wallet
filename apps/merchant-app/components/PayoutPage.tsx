@@ -6,16 +6,15 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { toast } from "@/hooks/use-toast"
-import { Payouts } from "@/lib/types"
-import { setamount, useBalance, setlockedamout } from "@repo/store/merchant"
+import { setamount, useBalance, setlockedamout, usePayouts, setPayouts } from "@repo/store/merchant"
 import { useDispatch } from "@repo/store/utils"
 import { Calendar, Download, Wallet } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 export default function PayoutsPage() {
-  const [payouts, setPayouts] = useState<Payouts[]>([])
   const dispatch = useDispatch()
   const { locked, balance } = useBalance();
+  const { payouts } = usePayouts()
 
   useEffect(() => {
     Promise.all([
@@ -23,7 +22,7 @@ export default function PayoutsPage() {
       getBalance()
     ]).then((data) => {
       const [payouts, balance] = data;
-      setPayouts(payouts)
+      dispatch(setPayouts(payouts))
       dispatch(setamount(balance.amount))
       dispatch(setlockedamout(balance.locked))
     }).catch((err) => {
@@ -108,7 +107,7 @@ export default function PayoutsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {payouts.length > 0 ? payouts.map((payout) => (
+              {payouts.payouts.length > 0 ? payouts.payouts.map((payout) => (
                 <TableRow key={payout.id}>
                   <TableCell className="font-medium">{payout.id}</TableCell>
                   <TableCell>{payout.startTime.toLocaleDateString()}</TableCell>

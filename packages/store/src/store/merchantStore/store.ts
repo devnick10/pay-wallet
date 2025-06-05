@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import balanceReducer from "./balanceSlice";
+import payoutsReducer from "./payoutsSlice";
 
 const store = configureStore({
     reducer: {
         balance: balanceReducer,
+        payouts: payoutsReducer,
     },
 });
 

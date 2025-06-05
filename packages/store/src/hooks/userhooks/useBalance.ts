@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { RootState } from "../store/userStore/store";
+import { RootState } from "../../store/userStore/store";
 
 
 export const useBalance = () => {
