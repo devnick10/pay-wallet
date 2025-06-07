@@ -7,6 +7,8 @@ import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { createOnRampPayout } from "@/actions/createOnRampPayout";
 import { toast } from "@/hooks/use-toast";
+import { useDispatch } from "@repo/store/utils";
+import { decrementamount, incrementlockedamount } from "@repo/store/merchant";
 
 const SUPPORTED_BANKS = [{
     name: "HDFC Bank",
@@ -18,13 +20,18 @@ export const PayoutCard = () => {
     const [amount, setAmount] = useState<number>();
     const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
     const [isLoading, setIsLoading] = useState(false);
-    
+    const dispatch = useDispatch()
     const handlePayout = async () => {
         if (!amount || !provider) return;
 
         setIsLoading(true);
         try {
+            //TODO: Implement payouts state 
+            // 1> add payouts to state on create payouts
+            // 1> get payoutes data from create payout action and put on state  
             const { success } = await createOnRampPayout(amount, provider);
+            dispatch(decrementamount(amount))
+            dispatch(incrementlockedamount(amount))
             if (success) {
                 toast({
                     description: "Payout add on processing."
