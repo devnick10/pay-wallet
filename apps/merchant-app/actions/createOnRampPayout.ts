@@ -12,12 +12,12 @@ export async function createOnRampPayout(amount: number, provider: string) {
     const merchantId = session?.user.id;
     if (!merchantId) {
         return {
-            success:false,
+            success: false,
             message: "User not logged in"
         }
     }
     try {
-        const [payout, _] = await prisma.$transaction([
+        const [payout, balance] = await prisma.$transaction([
             prisma.payout.create({
                 data: {
                     merchantId: Number(merchantId),
@@ -32,24 +32,26 @@ export async function createOnRampPayout(amount: number, provider: string) {
             prisma.balance.update({
                 where: { merchantId: Number(session.user.id) },
                 data: {
-                    locked: amount * 100
+                    locked: { increment: amount * 100 }
                 }
             })
         ])
-        if (payout) {
+        if (payout && balance) {
             return {
-                success:true,
-                message: "On ramp payout added"
+                success: true,
+                message: "On ramp payout added",
+                payout,
+                balance
             }
         }
         return {
-            success:false,
+            success: false,
             message: "Internal server error"
         }
     } catch (error) {
         console.error(error)
         return {
-            success:false,
+            success: false,
             message: "Internal server error"
         }
     }

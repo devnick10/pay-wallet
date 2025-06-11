@@ -9,4 +9,4 @@ export {
     incrementlockedamount,
     decrementlockedamount
 } from "./store/merchantStore/balanceSlice";
-export { setPayouts } from "./store/merchantStore/payoutsSlice"
+export { setPayouts, addPayout } from "./store/merchantStore/payoutsSlice"

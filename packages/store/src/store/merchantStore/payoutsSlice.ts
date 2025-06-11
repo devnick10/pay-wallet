@@ -27,10 +27,14 @@ const payoutSlice = createSlice({
         setPayouts: (state, action: PayloadAction<Payouts[]>) => {
             state.payouts = action.payload;
         },
+        addPayout: (state, action: PayloadAction<Payouts>) => {
+            state.payouts.push(action.payload);
+        },
     },
 });
 
 export const {
     setPayouts,
+    addPayout,
 } = payoutSlice.actions;
 export default payoutSlice.reducer;

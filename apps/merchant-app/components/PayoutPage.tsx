@@ -27,7 +27,7 @@ export default function PayoutsPage() {
       dispatch(setlockedamout(balance.locked))
     }).catch((err) => {
       console.error(err);
-      setPayouts([]);
+      dispatch(setPayouts([]));
       toast({
         description: "Something went wrong!"
       })

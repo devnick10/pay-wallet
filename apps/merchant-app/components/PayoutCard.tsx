@@ -1,14 +1,14 @@
 "use client"
+import { createOnRampPayout } from "@/actions/createOnRampPayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChangeEvent, useState } from "react";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { createOnRampPayout } from "@/actions/createOnRampPayout";
 import { toast } from "@/hooks/use-toast";
+import { addPayout, setlockedamout } from "@repo/store/merchant";
 import { useDispatch } from "@repo/store/utils";
-import { decrementamount, incrementlockedamount } from "@repo/store/merchant";
+import { ChangeEvent, useState } from "react";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 const SUPPORTED_BANKS = [{
     name: "HDFC Bank",
@@ -21,18 +21,18 @@ export const PayoutCard = () => {
     const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch()
+
     const handlePayout = async () => {
         if (!amount || !provider) return;
 
         setIsLoading(true);
         try {
-            //TODO: Implement payouts state 
-            // 1> add payouts to state on create payouts
-            // 1> get payoutes data from create payout action and put on state  
-            const { success } = await createOnRampPayout(amount, provider);
-            dispatch(decrementamount(amount))
-            dispatch(incrementlockedamount(amount))
-            if (success) {
+            const { success, payout, balance } = await createOnRampPayout(amount, provider);
+            console.log(balance);
+
+            if (success && payout && balance) {
+                dispatch(setlockedamout(balance.locked));
+                dispatch(addPayout(payout));
                 toast({
                     description: "Payout add on processing."
                 })
@@ -46,6 +46,7 @@ export const PayoutCard = () => {
             setIsLoading(false);
         }
     };
+
 
     return (
         <Card>
