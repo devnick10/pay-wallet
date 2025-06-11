@@ -7,6 +7,9 @@ const store = configureStore({
         balance: balanceReducer,
         payouts: payoutsReducer,
     },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false
+    })
 });
 
 export type RootState = ReturnType<typeof store.getState>;
