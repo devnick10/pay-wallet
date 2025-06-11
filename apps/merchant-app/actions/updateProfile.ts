@@ -1,15 +1,17 @@
 "use server"
+import { authOptions } from "@/app/lib/authOptions";
 import { UpdateMerchantData } from "@/lib/types";
 import prisma from "@repo/db/client";
 import { getServerSession } from "next-auth"
 
 export const updateProfile = async (data: UpdateMerchantData) => {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
     try {
         const updatePayload: Partial<UpdateMerchantData> = {};
 
-        if (data.name !== undefined) updatePayload.name = data.name;
-        if (data.email !== undefined) updatePayload.email = data.email;
+        if (data.name?.trim()) updatePayload.name = data.name.trim();
+        if (data.email?.trim()) updatePayload.email = data.email.trim();
+        if (data.number?.trim()) updatePayload.number = data.number.trim();
 
         await prisma.merchant.update({
             where: { id: Number(session?.user.id) },

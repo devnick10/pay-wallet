@@ -1,5 +1,6 @@
 "use client"
 
+import { getMerchantInfo } from "@/actions/getUserInfo"
 import { updateProfile } from "@/actions/updateProfile"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,14 +10,23 @@ import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "@/hooks/use-toast"
 import { UpdateMerchantData } from "@/lib/types"
+import { useMerchantInfo } from "@repo/store/merchant"
+import { useDispatch } from "@repo/store/utils"
 import { CreditCard, Save, User, Wallet } from "lucide-react"
-import { useSession } from "next-auth/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { setMerchantInfo } from "../../../packages/store/src/store/merchantStore/merchantSlice"
 
 export default function MerchantSettingsPage() {
   const [isLoading, setIsLoading] = useState(false)
-  const [personalInfo, setPersonalInfo] = useState<UpdateMerchantData>({ name: "", email: "", number: "" })
-  const session = useSession()
+  const [personalInfo, setPersonalInfo] = useState<UpdateMerchantData>({
+    name: "",
+    email: "",
+    number: ""
+  })
+
+  const dispatch = useDispatch()
+  const { merchantInfo } = useMerchantInfo()
+
 
   const updatePersonalInfo = async () => {
     setIsLoading(true)
@@ -37,7 +47,7 @@ export default function MerchantSettingsPage() {
     }
   }
 
-  const handleSave = () => {
+  const updateBusinessInfo = () => {
     // Simulate API call
     setIsLoading(false)
     setTimeout(() => {
@@ -45,6 +55,13 @@ export default function MerchantSettingsPage() {
       alert("Settings saved successfully!")
     }, 1000)
   }
+  useEffect(() => {
+    getMerchantInfo().then(data => {
+      if (data.success && data.data) {
+        dispatch(setMerchantInfo(data.data))
+      }
+    })
+  }, [])
 
   return (
     <div className="flex flex-col gap-6 p-4 md:gap-8 md:p-8">
@@ -77,7 +94,7 @@ export default function MerchantSettingsPage() {
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Full Name</Label>
                   <Input id="fullName"
-                    placeholder={session.data?.user.name}
+                    placeholder={merchantInfo.name || ""}
                     onChange={(e) => (
                       setPersonalInfo(prev => ({ ...prev, name: e.target.value }))
                     )} />
@@ -85,7 +102,7 @@ export default function MerchantSettingsPage() {
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
                   <Input id="email" type="email"
-                    placeholder={session.data?.user.email}
+                    placeholder={merchantInfo.email}
                     onChange={(e) => (
                       setPersonalInfo(prev => ({ ...prev, email: e.target.value }))
                     )} />
@@ -93,7 +110,7 @@ export default function MerchantSettingsPage() {
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
                   <Input id="phone"
-                    placeholder={"Phone Number"}
+                    placeholder={merchantInfo.number || "Phone Number"}
                     onChange={(e) => (
                       setPersonalInfo(prev => ({ ...prev, number: e.target.value }))
                     )} />
@@ -130,7 +147,7 @@ export default function MerchantSettingsPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button onClick={handleSave} disabled={isLoading} className="ml-auto">
+                <Button onClick={updateBusinessInfo} disabled={isLoading} className="ml-auto">
                   {isLoading ? "Saving..." : "Save Changes"}
                 </Button>
               </CardFooter>
@@ -180,7 +197,7 @@ export default function MerchantSettingsPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button onClick={handleSave} disabled={isLoading} className="ml-auto">
+                <Button onClick={updateBusinessInfo} disabled={isLoading} className="ml-auto">
                   {isLoading ? "Saving..." : "Save Changes"}
                 </Button>
               </CardFooter>
@@ -227,7 +244,7 @@ export default function MerchantSettingsPage() {
 
       <div className="flex justify-end gap-4">
         <Button variant="outline">Cancel</Button>
-        <Button onClick={handleSave} disabled={isLoading}>
+        <Button onClick={updateBusinessInfo} disabled={isLoading}>
           {isLoading ? (
             <>
               <Save className="mr-2 h-4 w-4 animate-spin" />

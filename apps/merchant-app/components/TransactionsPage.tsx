@@ -4,16 +4,18 @@ import { getTotalTransactions } from "@/actions/getTotalTransactions"
 import { TransactionsTable } from "@/components/TransactionTable"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from "@/hooks/use-toast"
-import { P2PTransfer } from "@/lib/types"
+import { setTransactions, useTransactions } from "@repo/store/merchant"
+import { useDispatch } from "@repo/store/utils"
 import { QrCode } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo } from "react"
 
 export default function TransactionsPage() {
-  const [transactions, setTransactions] = useState<P2PTransfer[]>([])
+  const transactions = useTransactions()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     getTotalTransactions().then((data) => {
-      setTransactions(data)
+      dispatch(setTransactions(data))
     }).catch((err) => {
       toast({
         description: "Something went wrong!"
@@ -24,7 +26,9 @@ export default function TransactionsPage() {
   }, [])
 
   // Calculate total amount
-  const totalAmount = transactions.reduce((sum, transaction) => sum + transaction.amount, 0)
+  const totalAmount = useMemo(() => {
+    return transactions.reduce((sum, transaction) => sum + transaction.amount, 0)
+  }, [transactions])
 
   return (
     <div className="flex flex-col gap-6 p-4 md:gap-8 md:p-8">
@@ -84,7 +88,7 @@ export default function TransactionsPage() {
           <CardDescription>A record of all your payment transactions.</CardDescription>
         </CardHeader>
         <CardContent>
-          <TransactionsTable transfers={transactions}/>
+          <TransactionsTable transfers={transactions} />
         </CardContent>
       </Card>
     </div>
