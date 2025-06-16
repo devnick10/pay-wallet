@@ -1,4 +1,4 @@
-import MerchantSettingsPage from '@/components/SettingsPage'
+import MerchantSettingsPage from '@/components/pages/SettingsPage'
 import React from 'react'
 
 const page = () => {

@@ -9,9 +9,9 @@ export const updateProfile = async (data: UpdateMerchantData) => {
     try {
         const updatePayload: Partial<UpdateMerchantData> = {};
 
-        if (data.name?.trim()) updatePayload.name = data.name.trim();
-        if (data.email?.trim()) updatePayload.email = data.email.trim();
-        if (data.number?.trim()) updatePayload.number = data.number.trim();
+        if (data.name?.trim() !== undefined) updatePayload.name = data.name.trim();
+        if (data.email?.trim() !== undefined) updatePayload.email = data.email.trim();
+        if (data.number?.trim() !== undefined) updatePayload.number = data.number.trim();
 
         await prisma.merchant.update({
             where: { id: Number(session?.user.id) },

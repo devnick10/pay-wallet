@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
 import { Label } from '@/components/ui/label'
 import { Input } from './ui/input'
@@ -9,10 +9,13 @@ import { Button } from './ui/button'
 import { addStoreInfo } from '@/actions/addStoreInfo'
 import { StoreCategory, StoreData } from "@/lib/types"
 import { toast } from '@/hooks/use-toast'
+import { getStoreInfo } from '@/actions/getStoreInfo'
 
 export const StoreInfoCard = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [storeData, setStoreData] = useState<StoreData>({ name: "", description: "", category: StoreCategory.RETAIL })
+    const [storeInfo, setStoreInfo] = useState<StoreData | null>(null)
+
 
     const handleSave = async () => {
         setIsLoading(true)
@@ -34,6 +37,23 @@ export const StoreInfoCard = () => {
         }
     }
 
+    useEffect(() => {
+        setIsLoading(true)
+        getStoreInfo().then(({ success, data }) => {
+            console.log(data)
+            if (success && data) {
+                setStoreInfo(data)
+            }
+        }).catch((error) => {
+            console.error(error)
+            toast({
+                description: "Internal server error!"
+            })
+        }).finally(() => {
+            setIsLoading(false)
+        })
+    }, [])
+
     return (
         <Card>
             <CardHeader>
@@ -45,6 +65,7 @@ export const StoreInfoCard = () => {
                     <Label htmlFor="storeName">Store Name</Label>
                     <Input
                         id={"storeName"}
+                        placeholder={storeInfo?.name || ""}
                         value={storeData.name}
                         onChange={
                             (e) => setStoreData(prev => ({ ...prev, name: e.target.value }))
@@ -59,7 +80,9 @@ export const StoreInfoCard = () => {
                         onChange={
                             (e) => setStoreData(prev => ({ ...prev, description: e.target.value }))
                         }
-                        placeholder="A cozy cafe serving freshly brewed coffee and homemade pastries."
+                        placeholder={
+                            storeInfo?.description || "A cozy cafe serving freshly brewed coffee and homemade pastries."
+                        }
                     />
                 </div>
                 <div className="space-y-2">
@@ -73,7 +96,7 @@ export const StoreInfoCard = () => {
                         }}
                     >
                         <SelectTrigger>
-                            <SelectValue placeholder="Select category" />
+                            <SelectValue placeholder={storeInfo?.category || "Select category"} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value={StoreCategory.FOOD}>Food & Beverages</SelectItem>

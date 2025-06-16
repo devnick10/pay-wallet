@@ -14,7 +14,7 @@ import { useMerchantInfo } from "@repo/store/merchant"
 import { useDispatch } from "@repo/store/utils"
 import { CreditCard, Save, User, Wallet } from "lucide-react"
 import { useEffect, useState } from "react"
-import { setMerchantInfo } from "../../../packages/store/src/store/merchantStore/merchantSlice"
+import { setMerchantInfo } from "@repo/store/merchant"
 
 export default function MerchantSettingsPage() {
   const [isLoading, setIsLoading] = useState(false)

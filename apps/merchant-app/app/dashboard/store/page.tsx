@@ -1,4 +1,4 @@
-import StoreSettingsPage from '@/components/StorePage'
+import StoreSettingsPage from '@/components/pages/StorePage'
 import React from 'react'
 
 function page() {

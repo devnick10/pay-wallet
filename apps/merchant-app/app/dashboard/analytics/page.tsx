@@ -1,4 +1,4 @@
-import Analytics from '@/components/AnalyticsPage'
+import Analytics from '@/components/pages/AnalyticsPage'
 import { Suspense } from 'react'
 
 const page = () => {

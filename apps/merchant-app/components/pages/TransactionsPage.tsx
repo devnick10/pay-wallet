@@ -26,8 +26,13 @@ export default function TransactionsPage() {
   }, [])
 
   // Calculate total amount
-  const totalAmount = useMemo(() => {
-    return transactions.reduce((sum, transaction) => sum + transaction.amount, 0)
+  const { totalAmount, averageTransactions } = useMemo(() => {
+    const totalAmount = transactions.reduce((sum, transaction) => sum + transaction.amount, 0)
+    const averageTransactions = (totalAmount / transactions.length || 0).toFixed(2)
+    return {
+      totalAmount,
+      averageTransactions
+    }
   }, [transactions])
 
   return (
@@ -77,7 +82,7 @@ export default function TransactionsPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">₹{(totalAmount / transactions.length || 0).toFixed(2)}</p>
+            <p className="text-3xl font-bold">₹{averageTransactions}</p>
           </CardContent>
         </Card>
       </div>

@@ -1,4 +1,4 @@
-import GenerateQRPage from '@/components/QrgeneratorPage'
+import GenerateQRPage from '@/components/pages/QrgeneratorPage'
 
 function page() {
   return (

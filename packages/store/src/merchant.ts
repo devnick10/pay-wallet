@@ -18,3 +18,4 @@ export {
     addPayout
 } from "./store/merchantStore/payoutsSlice"
 export { setTransactions } from "./store/merchantStore/transactionSlice"
+export { setMerchantInfo } from "./store/merchantStore/merchantSlice";
