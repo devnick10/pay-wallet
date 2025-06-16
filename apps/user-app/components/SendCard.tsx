@@ -14,13 +14,13 @@ export default function SendCard() {
 
     const handleSendMoney = async () => {
         if (!number || !amount) return;
-        
+
         setIsLoading(true);
         try {
             const res = await p2pTransfer(number, amount * 100);
             setNumber("");
             setAmount(0);
-            toast.success(res.message)
+            toast.success(res?.message || "Internal server error")
         } catch (error) {
             toast.success("Transfer failed!")
             console.error("Transfer failed:", error);
@@ -29,56 +29,57 @@ export default function SendCard() {
         }
     };
 
-return (
-    <Card>
-        <CardHeader>
-            <CardTitle>Send Money</CardTitle>
-            <CardDescription>Transfer funds to another user</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-            <div className="space-y-2">
-                <Label htmlFor="number">Recipient Phone Number</Label>
-                <Input
-                    id="number"
-                    type="tel"
-                    placeholder="Enter phone number"
-                    value={number}
-                    onChange={(e) => setNumber(e.target.value)}
-                />
-            </div>
-            
-            <div className="space-y-2">
-                <Label htmlFor="amount">Amount (₹)</Label>
-                <Input
-                    id="amount"
-                    type="number"
-                    placeholder="Enter amount"
-                    value={amount}
-                    onChange={(e) => setAmount(Number(e.target.value))}
-                />
-            </div>
-            
-            <div className="flex flex-wrap gap-2">
-                {[100, 500, 1000, 2000, 5000].map((value) => (
-                    <Button 
-                        key={value} 
-                        variant="outline" 
-                        onClick={() => setAmount(value)}
-                        className="flex-1"
-                    >
-                        ₹{value}
-                    </Button>
-                ))}
-            </div>
-        </CardContent>
-        <CardFooter>
-            <Button 
-                onClick={handleSendMoney} 
-                disabled={!number || !amount || isLoading} 
-                className="w-full"
-            >
-                {isLoading ? "Processing..." : `Send ₹${amount || "0"}`}
-            </Button>
-        </CardFooter>
-    </Card>
-)}
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Send Money</CardTitle>
+                <CardDescription>Transfer funds to another user</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="number">Recipient Phone Number</Label>
+                    <Input
+                        id="number"
+                        type="tel"
+                        placeholder="Enter phone number"
+                        value={number}
+                        onChange={(e) => setNumber(e.target.value)}
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="amount">Amount (₹)</Label>
+                    <Input
+                        id="amount"
+                        type="number"
+                        placeholder="Enter amount"
+                        value={amount}
+                        onChange={(e) => setAmount(Number(e.target.value))}
+                    />
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                    {[100, 500, 1000, 2000, 5000].map((value) => (
+                        <Button
+                            key={value}
+                            variant="outline"
+                            onClick={() => setAmount(value)}
+                            className="flex-1"
+                        >
+                            ₹{value}
+                        </Button>
+                    ))}
+                </div>
+            </CardContent>
+            <CardFooter>
+                <Button
+                    onClick={handleSendMoney}
+                    disabled={!number || !amount || isLoading}
+                    className="w-full"
+                >
+                    {isLoading ? "Processing..." : `Send ₹${amount || "0"}`}
+                </Button>
+            </CardFooter>
+        </Card>
+    )
+}

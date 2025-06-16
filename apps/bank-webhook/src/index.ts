@@ -34,7 +34,7 @@ app.post("/hdfcWebhook", async (req, res) => {
 
     try {
         await db.$transaction([
-            db.balance.updateMany({
+            db.balance.update({
                 where: {
                     userId: Number(user_identifier)
                 },
@@ -47,7 +47,7 @@ app.post("/hdfcWebhook", async (req, res) => {
                     }
                 }
             }),
-            db.onRampTransaction.updateMany({
+            db.onRampTransaction.update({
                 where: {
                     token
                 },
@@ -131,4 +131,7 @@ app.post("/payout/hdfcWebhook", async (req, res) => {
     }
 })
 
-app.listen(3003);
+const port = 3003
+app.listen(port, () => {
+    console.log("Server is running at port", port)
+});

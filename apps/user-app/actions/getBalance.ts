@@ -8,7 +8,7 @@ export async function getBalance() {
     try {
         const balance = await prisma.balance.findUnique({
             where: {
-                merchantId: Number(session?.user?.id)
+                userId: Number(session?.user?.id)
             }
         });
         return {

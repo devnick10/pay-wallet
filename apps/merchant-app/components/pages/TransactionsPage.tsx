@@ -27,7 +27,7 @@ export default function TransactionsPage() {
 
   // Calculate total amount
   const { totalAmount, averageTransactions } = useMemo(() => {
-    const totalAmount = transactions.reduce((sum, transaction) => sum + transaction.amount, 0)
+    const totalAmount = (transactions.reduce((sum, transaction) => sum + transaction.amount, 0)) / 100
     const averageTransactions = (totalAmount / transactions.length || 0).toFixed(2)
     return {
       totalAmount,

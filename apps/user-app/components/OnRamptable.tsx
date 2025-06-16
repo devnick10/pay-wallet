@@ -2,20 +2,20 @@
 
 import { useState, useEffect } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { getOnRampTransactions} from "@/actions/getOnRampTransactions";
-import { SearchBar } from "@/components/SearchBar"; 
+import { getOnRampTransactions } from "@/actions/getOnRampTransactions";
+import { SearchBar } from "@/components/SearchBar";
 import { OnRampTransaction } from "@/lib/types";
 
 interface OnRampTableProps {
   transactions?: OnRampTransaction[];
 }
 
-export function OnRampTable({ 
+export function OnRampTable({
   transactions: initialTransactions = []
 }: OnRampTableProps) {
   const [transactions, setTransactions] = useState<OnRampTransaction[]>(initialTransactions);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isLoading, setIsLoading] = useState(initialTransactions.length === 0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     async function loadTransactions() {
@@ -29,18 +29,13 @@ export function OnRampTable({
         setIsLoading(false);
       }
     }
-
-    if (initialTransactions.length === 0) {
-      loadTransactions();
-    }
-  },[initialTransactions]);
+    loadTransactions()
+  }, []);
 
   const filteredTransactions = transactions.filter((transaction) => {
     const matchesSearch =
       transaction.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       transaction.provider.toLowerCase().includes(searchTerm.toLowerCase());
-
-    // Note: Since your schema doesn't have type info, filterType is kept for future use
     return matchesSearch;
   });
 

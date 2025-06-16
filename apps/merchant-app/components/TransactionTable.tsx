@@ -62,7 +62,7 @@ export function TransactionsTable({ transfers, dateNone }: TransactionsTableProp
                                         </TableCell>
                                         <TableCell className="text-right">
                                             <span className={"text-green-600 dark:text-green-400"}>
-                                                {"+"}{transfer.amount.toLocaleString("en-IN")}
+                                                {"+"}{(transfer.amount / 100).toLocaleString("en-IN")}
                                             </span>
                                         </TableCell>
                                         <TableCell>
