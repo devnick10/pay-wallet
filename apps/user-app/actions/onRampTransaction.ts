@@ -15,31 +15,48 @@ export async function createOnRampTransaction(amount: number, provider: string) 
             message: "User not logged in"
         }
     }
-    
-    await prisma.$transaction([
-        prisma.onRampTransaction.create({
-            data: {
-                userId: Number(userId),
-                amount: amount * 100,
-                status: "Processing",
-                startTime: new Date(),
-                provider,
-                token: token
+    try {
+
+        const [onRampTxns, balance] = await prisma.$transaction([
+            prisma.onRampTransaction.create({
+                data: {
+                    userId: Number(userId),
+                    amount: amount * 100,
+                    status: "Processing",
+                    startTime: new Date(),
+                    provider,
+                    token: token
+                }
+            }),
+
+            prisma.balance.update({
+                where: { userId: Number(session.user.id) },
+                data: {
+                    locked: { increment: amount * 100 }
+                }
+            })
+        ])
+        if (onRampTxns && balance) {
+            return {
+                success: true,
+                message: "OnRampTransactions added.",
+                onRampTxns:{
+                    ...onRampTxns,
+                    time:onRampTxns.startTime,
+                    id:String(onRampTxns.id)
+                },
+                balance
             }
-        }),
-
-        prisma.balance.update({
-            where: { userId: Number(session.user.id) },
-            data: {
-                locked: amount * 100
-            }
-        })
-    ])
-
-
-
-    return {
-        message: "On ramp transaction added"
+        }
+        return {
+            success: false,
+            message: "Internal server error"
+        }
+    } catch (error) {
+        console.error(error)
+        return {
+            success: false,
+            message: "Internal server error"
+        }
     }
-
 }

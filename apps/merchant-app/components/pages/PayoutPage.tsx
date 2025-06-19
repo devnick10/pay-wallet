@@ -13,7 +13,7 @@ import { useEffect } from "react"
 
 export default function PayoutsPage() {
   const dispatch = useDispatch()
-  const { locked, balance } = useBalance();
+  const { locked, amount } = useBalance();
   const { payouts } = usePayouts()
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function PayoutsPage() {
         description: "Something went wrong!"
       })
     })
-  }, [])
+  }, [dispatch])
 
   return (
     <div className="flex flex-col gap-6 p-4 md:gap-8 md:p-8">
@@ -58,7 +58,7 @@ export default function PayoutsPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold">₹{(balance / 100).toLocaleString("en-IN")}</p>
+              <p className="text-3xl font-bold">₹{(amount / 100).toLocaleString("en-IN")}</p>
             </CardContent>
           </Card>
 

@@ -1,32 +1,10 @@
-import { AddMoney } from "@/components/AddMoneyCard";
-import { BalanceCard } from "@/components/BalanceCard";
-import { OnRampTransactions } from "@/components/OnRampTransaction";
-import { getOnRampTransactions } from "@/actions/getOnRampTransactions";
-import { getBalance } from "@/actions/getBalance";
+import AddMoneyPage from '@/components/pages/AddMoneyPage'
+import React from 'react'
 
-
-
-export default async function Page() {
-  const balance = await getBalance();
-  const transactions = await getOnRampTransactions();
+function page() {
   return (
-    <div className="flex flex-col gap-6 p-4 md:gap-8 md:p-8">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Wallet</h1>
-        <p className="text-muted-foreground">Manage your wallet balance and transactions</p>
-      </div>
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Left Column - Add Money */}
-        <div className="lg:col-span-1">
-          <AddMoney />
-        </div>
-
-        {/* Right Column - Balance and Transactions */}
-        <div className="lg:col-span-2 space-y-6">
-          <BalanceCard amount={balance.amount} locked={balance.locked} />
-          <OnRampTransactions transactions={transactions} />
-        </div>
-      </div>
-    </div >
+    <AddMoneyPage />
   )
 }
+
+export default page

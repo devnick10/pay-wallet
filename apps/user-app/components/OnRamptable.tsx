@@ -1,28 +1,24 @@
 "use client"
 
-import { useState, useEffect } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getOnRampTransactions } from "@/actions/getOnRampTransactions";
 import { SearchBar } from "@/components/SearchBar";
-import { OnRampTransaction } from "@/lib/types";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { setOnRampTxns, useOnRampTxns } from "@repo/store/user";
+import { useDispatch } from "@repo/store/utils";
+import { useEffect, useState } from "react";
 
-interface OnRampTableProps {
-  transactions?: OnRampTransaction[];
-}
-
-export function OnRampTable({
-  transactions: initialTransactions = []
-}: OnRampTableProps) {
-  const [transactions, setTransactions] = useState<OnRampTransaction[]>(initialTransactions);
+export function OnRampTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const dispatch = useDispatch()
+  const transactions = useOnRampTxns().onRampTxns;
 
   useEffect(() => {
     async function loadTransactions() {
       setIsLoading(true);
       try {
         const data = await getOnRampTransactions();
-        setTransactions(data);
+        dispatch(setOnRampTxns(data))
       } catch (error) {
         console.error("Failed to fetch transactions:", error);
       } finally {
@@ -30,7 +26,7 @@ export function OnRampTable({
       }
     }
     loadTransactions()
-  }, []);
+  }, [dispatch]);
 
   const filteredTransactions = transactions.filter((transaction) => {
     const matchesSearch =

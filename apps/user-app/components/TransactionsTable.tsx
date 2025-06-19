@@ -1,20 +1,38 @@
 "use client"
 
-import { useState } from "react";
-import { ArrowDownLeft} from "lucide-react";
+import { getP2pTransactions } from "@/actions/getP2pTransactions";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { setP2pTransactions, useP2pTransactions } from "@repo/store/user";
+import { useDispatch } from "@repo/store/utils";
+import { ArrowDownLeft } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { SearchBar } from "./SearchBar";
-import { P2PTransfer } from "@/lib/types";
 
-interface TransactionsTableProps {
-  transfers: P2PTransfer[];
-  currentUserNumber: string;
-  dateNone?:boolean;
-}
 
-export function TransactionsTable({ transfers, currentUserNumber ,dateNone}: TransactionsTableProps) {
+export function TransactionsTable({dateNone,recentp2p}:{dateNone?:boolean,recentp2p?:boolean}) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<"all" | "sent" | "received">("all");
+  const currentUserNumber = useSession().data?.user.email
+  const dispatch = useDispatch();
+  const txns = useP2pTransactions();
+  let transfers;
+  if(recentp2p){
+    transfers = txns.slice(0,10)
+  }else{
+    transfers = txns;
+  }
+
+
+  useEffect(() => {
+    getP2pTransactions()
+      .then((data) => {
+        dispatch(setP2pTransactions(data))
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }, [dispatch])
 
   const filteredTransfers = transfers.filter((transfer) => {
     const isSent = transfer.fromUser.number === currentUserNumber;
@@ -23,8 +41,8 @@ export function TransactionsTable({ transfers, currentUserNumber ,dateNone}: Tra
     // Search matches counterparty name, phone number, or transaction ID
     const matchesSearch =
       (counterparty.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      counterparty.number?.includes(searchTerm) ||
-      transfer.id.toString().includes(searchTerm));
+        counterparty.number?.includes(searchTerm) ||
+        transfer.id.toString().includes(searchTerm));
 
     // Filter matches
     const matchesFilter =
@@ -54,13 +72,13 @@ export function TransactionsTable({ transfers, currentUserNumber ,dateNone}: Tra
         onSearchChange={setSearchTerm}
         onFilterChange={(value) => setFilterType(value as "all" | "sent" | "received")}
       />
-      
+
       <div className="rounded-md border">
         <Table>
           <TableHeader className="">
             <TableRow>
               <TableHead>Transaction ID</TableHead>
-             {!dateNone && <TableHead>Date & Time</TableHead>}
+              {!dateNone && <TableHead>Date & Time</TableHead>}
               <TableHead>Counterparty</TableHead>
               <TableHead>Phone Number</TableHead>
               <TableHead>Type</TableHead>

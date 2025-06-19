@@ -28,8 +28,6 @@ export const PayoutCard = () => {
         setIsLoading(true);
         try {
             const { success, payout, balance } = await createOnRampPayout(amount, provider);
-            console.log(balance);
-
             if (success && payout && balance) {
                 dispatch(setlockedamout(balance.locked));
                 dispatch(addPayout(payout));

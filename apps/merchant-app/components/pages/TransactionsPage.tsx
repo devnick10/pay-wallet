@@ -23,7 +23,7 @@ export default function TransactionsPage() {
       console.error(err);
       setTransactions([])
     })
-  }, [])
+  }, [dispatch])
 
   // Calculate total amount
   const { totalAmount, averageTransactions } = useMemo(() => {

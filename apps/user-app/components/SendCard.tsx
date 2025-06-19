@@ -1,26 +1,33 @@
 "use client"
-import { useState } from "react";
 import { p2pTransfer } from "@/actions/p2pTransfer";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { addP2pTransaction } from "@repo/store/user";
+import { useDispatch } from "@repo/store/utils";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 export default function SendCard() {
     const [number, setNumber] = useState("");
     const [amount, setAmount] = useState<number>(0);
     const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useDispatch();
 
     const handleSendMoney = async () => {
         if (!number || !amount) return;
 
         setIsLoading(true);
         try {
-            const res = await p2pTransfer(number, amount * 100);
-            setNumber("");
-            setAmount(0);
-            toast.success(res?.message || "Internal server error")
+            const {success,p2p,message} = await p2pTransfer(number, amount * 100);
+            if(success && p2p){
+                dispatch(addP2pTransaction(p2p))
+                setNumber("");
+                setAmount(0);
+                toast.success(message)
+            }
+            toast.success(message || "Internal server error")
         } catch (error) {
             toast.success("Transfer failed!")
             console.error("Transfer failed:", error);
