@@ -10,7 +10,7 @@ function LandingHeader() {
             <div className="w-full px-4 md:px-8 flex h-16 items-center justify-between">
                 <div className="flex items-center gap-2">
                     <CreditCard className="h-6 w-6 text-primary" />
-                    <span className="text-xl font-bold">PayWallet Business</span>
+                    <span className="sm:text-xl font-bold">PayWallet Business</span>
                 </div>
                 <nav className="hidden md:flex items-center gap-6">
                     <Link href="#features" className="text-sm font-medium hover:text-primary">
