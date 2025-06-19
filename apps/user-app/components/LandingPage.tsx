@@ -15,7 +15,7 @@ export default function LandingPage() {
         {/* Hero Section */}
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
           <div className="w-full  px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:grid-cols-2">
+            <div className="flex sm:flex-row items-center justify-center flex-col gap-4 md:gap-8 lg:gap-12 xl:grid-cols-2">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
@@ -40,7 +40,7 @@ export default function LandingPage() {
               </div>
               <div className="flex items-center justify-center">
                 <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg">
-                  <div className="overflow-hidden rounded-xl border bg-background shadow-xl">
+                  <div className=" overflow-hidden rounded-xl border bg-background shadow-xl">
                     <div className="p-6">
                       <div className="space-y-2">
                         <h3 className="text-xl font-bold">Your Wallet</h3>
