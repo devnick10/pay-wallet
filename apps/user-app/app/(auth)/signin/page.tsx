@@ -1,15 +1,14 @@
 "use client"
-import type React from "react"
-import { useState } from "react"
-import Link from "next/link"
-import { ArrowLeft, CreditCard, Eye, EyeOff } from "lucide-react"
+import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ThemeToggle } from "@/components/ThemeToggle"
+import { ArrowLeft, CreditCard, Eye, EyeOff } from "lucide-react"
 import { signIn } from "next-auth/react"
-import toast from "react-hot-toast"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
+import toast from "react-hot-toast"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -17,7 +16,45 @@ export default function LoginPage() {
   const [password, setPassword] = useState<string>("")
   const [name, setName] = useState<string>("")
 
-  const router = useRouter()
+  const router = useRouter();
+
+  async function handleSignin() {
+    if (!name.trim() || !phoneNumber.trim() || !password.trim()) {
+      toast.error("Please provide all fields");
+      return;
+    }
+
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        name,
+        phone: phoneNumber,
+        password,
+        callbackUrl: "/dashboard"
+      });
+
+      if (result?.error) {
+        toast.error(result.error === "CredentialsSignin"
+          ? "Invalid credentials"
+          : result.error);
+        return;
+      }
+
+      if (result?.url) {
+        // Wait briefly to ensure session is set
+        setTimeout(() => {
+          toast.success("Sign in successful");
+          router.push(result.url as string);
+        }, 100);
+      } else {
+        toast.error("Authentication failed - no redirect URL");
+      }
+    } catch (error) {
+      console.error("Sign in error:", error);
+      toast.error("An unexpected error occurred");
+    }
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="flex h-16 items-center justify-between border-b px-4 md:px-6">
@@ -89,42 +126,7 @@ export default function LoginPage() {
                 </Button>
               </div>
             </div>
-            <Button onClick={async () => {
-              if (!name.trim() || !phoneNumber.trim() || !password.trim()) {
-                toast.error("Please provide all fields");
-                return;
-              }
-
-              try {
-                const result = await signIn("credentials", {
-                  redirect: false,
-                  name,
-                  phone: phoneNumber,
-                  password,
-                  callbackUrl: "/dashboard"
-                });
-                
-                if (result?.error) {
-                  toast.error(result.error === "CredentialsSignin"
-                    ? "Invalid credentials"
-                    : result.error);
-                  return;
-                }
-
-                if (result?.url) {
-                  // Wait briefly to ensure session is set
-                  setTimeout(() => {
-                    toast.success("Sign in successful");
-                    router.push(result.url as string);
-                  }, 100);
-                } else {
-                  toast.error("Authentication failed - no redirect URL");
-                }
-              } catch (error) {
-                console.error("Sign in error:", error);
-                toast.error("An unexpected error occurred");
-              }
-            }} className="w-full">
+            <Button onClick={handleSignin} className="w-full">
               Sign In
             </Button>
             <div className="relative">
