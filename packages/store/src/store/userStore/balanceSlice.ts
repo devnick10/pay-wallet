@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
   amount: 0,
-  locked: 0
+  locked: 0,
 };
 
 const amountSlice = createSlice({
@@ -36,6 +36,6 @@ export const {
   decrementamount,
   setlockedamout,
   incrementlockedamount,
-  decrementlockedamount
+  decrementlockedamount,
 } = amountSlice.actions;
 export default amountSlice.reducer;

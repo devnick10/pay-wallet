@@ -1,10 +1,8 @@
-import StoreSettingsPage from '@/components/pages/StorePage'
-import React from 'react'
+import StoreSettingsPage from "@/components/pages/StorePage";
+import React from "react";
 
 function page() {
-  return (
-    <StoreSettingsPage/>
-  )
+  return <StoreSettingsPage />;
 }
 
-export default page
+export default page;

@@ -1,77 +1,92 @@
-"use client"
+"use client";
 
-import { useRef, useState } from "react"
-import { Download, QrCode, Share2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import QRCode from "react-qr-code"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { toast } from "@/hooks/use-toast"
+import { useRef, useState } from "react";
+import { Download, QrCode, Share2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import QRCode from "react-qr-code";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/hooks/use-toast";
 
 export default function GenerateQRPage() {
-  const [amount, setAmount] = useState("")
-  const [description, setDescription] = useState("")
-  const [qrValue, setQrValue] = useState("")
-  const upiId = "paywallet.upi@id" //Temprory hardcode
-  const qrComponent = useRef(null)
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
+  const [qrValue, setQrValue] = useState("");
+  const upiId = "paywallet.upi@id"; //Temprory hardcode
+  const qrComponent = useRef(null);
 
   const handleGenerateQR = () => {
     if (!amount) {
       toast({
         title: "Error",
         description: "Please enter an amount",
-        variant: "destructive"
-      })
-      return
+        variant: "destructive",
+      });
+      return;
     }
 
     // Generate UPI payment link
-    const paymentUrl = generateUpiPaymentLink(upiId, amount, description)
-    setQrValue(paymentUrl)
-  }
+    const paymentUrl = generateUpiPaymentLink(upiId, amount, description);
+    setQrValue(paymentUrl);
+  };
 
-  const generateUpiPaymentLink = (upiId: string, amount: string, note: string = "") => {
+  const generateUpiPaymentLink = (
+    upiId: string,
+    amount: string,
+    note: string = "",
+  ) => {
     // Format according to UPI standards
-    const params = new URLSearchParams()
-    params.set("pa", upiId)
-    params.set("pn", "paywallet") // Payee name
-    params.set("am", amount)
-    params.set("cu", "INR")
-    if (note) params.set("tn", note)
+    const params = new URLSearchParams();
+    params.set("pa", upiId);
+    params.set("pn", "paywallet"); // Payee name
+    params.set("am", amount);
+    params.set("cu", "INR");
+    if (note) params.set("tn", note);
 
-    return `upi://pay?${params.toString()}`
-  }
+    return `upi://pay?${params.toString()}`;
+  };
 
   const handleDownloadQR = () => {
-    if (!qrValue) return
-    // @ts-expect-error temprory 
-    const svg = qrComponent as SVGSVGElement
-    const svgData = new XMLSerializer().serializeToString(svg)
-    const canvas = document.createElement("canvas")
-    const ctx = canvas.getContext("2d")
-    const img = new Image()
+    if (!qrValue) return;
+    // @ts-expect-error temprory
+    const svg = qrComponent as SVGSVGElement;
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
 
     img.onload = () => {
-      canvas.width = img.width
-      canvas.height = img.height
-      ctx?.drawImage(img, 0, 0)
-      const pngFile = canvas.toDataURL("image/png")
-      const downloadLink = document.createElement("a")
-      downloadLink.download = `payment-qr-${amount}.png`
-      downloadLink.href = pngFile
-      downloadLink.click()
-    }
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx?.drawImage(img, 0, 0);
+      const pngFile = canvas.toDataURL("image/png");
+      const downloadLink = document.createElement("a");
+      downloadLink.download = `payment-qr-${amount}.png`;
+      downloadLink.href = pngFile;
+      downloadLink.click();
+    };
 
-    img.src = `data:image/svg+xml;base64,${btoa(svgData)}`
-  }
+    img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
+  };
 
   return (
     <div className="flex flex-col gap-6 p-4 md:gap-8 md:p-8">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Generate Payment QR</h1>
-        <p className="text-muted-foreground">Create QR codes for your customers to scan and pay.</p>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Generate Payment QR
+        </h1>
+        <p className="text-muted-foreground">
+          Create QR codes for your customers to scan and pay.
+        </p>
       </div>
 
       <Tabs defaultValue="fixed" className="w-full">
@@ -85,7 +100,9 @@ export default function GenerateQRPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Fixed Amount QR Code</CardTitle>
-                <CardDescription>Generate a QR code for a specific amount</CardDescription>
+                <CardDescription>
+                  Generate a QR code for a specific amount
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
@@ -121,7 +138,11 @@ export default function GenerateQRPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button onClick={handleGenerateQR} disabled={!amount} className="w-full">
+                <Button
+                  onClick={handleGenerateQR}
+                  disabled={!amount}
+                  className="w-full"
+                >
                   Generate QR Code
                 </Button>
               </CardFooter>
@@ -148,7 +169,11 @@ export default function GenerateQRPage() {
                     </div>
                     <div className="text-center">
                       <p className="font-medium">Amount: ₹{amount}</p>
-                      {description && <p className="text-sm text-muted-foreground">For: {description}</p>}
+                      {description && (
+                        <p className="text-sm text-muted-foreground">
+                          For: {description}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ) : (
@@ -171,15 +196,21 @@ export default function GenerateQRPage() {
                 <Button
                   variant="outline"
                   disabled={!qrValue}
-                  onClick={() => navigator.share({
-                    title: `Pay ₹${amount}`,
-                    text: description || `Payment request for ₹${amount}`,
-                    url: qrValue
-                  }).catch(() => {
-                    // Fallback if Web Share API not supported
-                    navigator.clipboard.writeText(qrValue)
-                    toast({ description: "Payment link copied to clipboard" })
-                  })}
+                  onClick={() =>
+                    navigator
+                      .share({
+                        title: `Pay ₹${amount}`,
+                        text: description || `Payment request for ₹${amount}`,
+                        url: qrValue,
+                      })
+                      .catch(() => {
+                        // Fallback if Web Share API not supported
+                        navigator.clipboard.writeText(qrValue);
+                        toast({
+                          description: "Payment link copied to clipboard",
+                        });
+                      })
+                  }
                 >
                   <Share2 className="mr-2 h-4 w-4" />
                   Share
@@ -193,7 +224,10 @@ export default function GenerateQRPage() {
           <Card>
             <CardHeader>
               <CardTitle>Dynamic QR Code</CardTitle>
-              <CardDescription>Generate a QR code that allows customers to enter their own amount</CardDescription>
+              <CardDescription>
+                Generate a QR code that allows customers to enter their own
+                amount
+              </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center space-y-6">
               <div className="flex h-64 w-64 items-center justify-center rounded-lg border-2 border-dashed p-4">
@@ -202,7 +236,8 @@ export default function GenerateQRPage() {
               <div className="text-center">
                 <p className="font-medium">Dynamic Payment QR</p>
                 <p className="text-sm text-muted-foreground">
-                  Customers can scan this QR code and enter their own payment amount
+                  Customers can scan this QR code and enter their own payment
+                  amount
                 </p>
               </div>
             </CardContent>
@@ -220,5 +255,5 @@ export default function GenerateQRPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

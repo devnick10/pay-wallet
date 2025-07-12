@@ -3,135 +3,129 @@ import db from "@repo/db/client";
 import { onRampValidationSchema } from "@repo/common/common";
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
 app.post("/hdfcWebhook", async (req, res) => {
-    //TODO: HDFC bank should ideally send us a secret so we know this is sent by them
-    const result = onRampValidationSchema.safeParse(req.body)
-    if (!result.success) {
-        res.status(411).json({
-            message: "Verify inputs"
-        })
-        return
-    }
-    const {
-        token, amount, user_identifier
-    } = result.data;
+  //TODO: HDFC bank should ideally send us a secret so we know this is sent by them
+  const result = onRampValidationSchema.safeParse(req.body);
+  if (!result.success) {
+    res.status(411).json({
+      message: "Verify inputs",
+    });
+    return;
+  }
+  const { token, amount, user_identifier } = result.data;
 
-    const transactionStatus = await db.onRampTransaction.findUnique({
+  const transactionStatus = await db.onRampTransaction.findUnique({
+    where: {
+      token,
+    },
+  });
+
+  if (transactionStatus?.status == "Success") {
+    res.json({
+      message: "Invalid token",
+    });
+    return;
+  }
+
+  try {
+    await db.$transaction([
+      db.balance.update({
         where: {
-            token
-        }
-    })
+          userId: Number(user_identifier),
+        },
+        data: {
+          locked: {
+            decrement: Number(amount),
+          },
+          amount: {
+            increment: Number(amount),
+          },
+        },
+      }),
+      db.onRampTransaction.update({
+        where: {
+          token,
+        },
+        data: {
+          status: "Success",
+        },
+      }),
+    ]);
 
-    if (transactionStatus?.status == "Success") {
-        res.json({
-            message: "Invalid token"
-
-        })
-        return
-    }
-
-    try {
-        await db.$transaction([
-            db.balance.update({
-                where: {
-                    userId: Number(user_identifier)
-                },
-                data: {
-                    locked: {
-                        decrement: Number(amount)
-                    },
-                    amount: {
-                        increment: Number(amount)
-                    }
-                }
-            }),
-            db.onRampTransaction.update({
-                where: {
-                    token
-                },
-                data: {
-                    status: "Success",
-                }
-            })
-        ]);
-
-        res.json({
-            message: "Captured"
-        })
-    } catch (e) {
-        console.error(e);
-        res.status(411).json({
-            message: "Error while processing webhook"
-        })
-    }
-})
+    res.json({
+      message: "Captured",
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(411).json({
+      message: "Error while processing webhook",
+    });
+  }
+});
 
 app.post("/payout/hdfcWebhook", async (req, res) => {
-    const result = onRampValidationSchema.safeParse(req.body)
-    if (!result.success) {
-        res.status(411).json({
-            message: "Verify inputs"
-        })
-        return
-    }
+  const result = onRampValidationSchema.safeParse(req.body);
+  if (!result.success) {
+    res.status(411).json({
+      message: "Verify inputs",
+    });
+    return;
+  }
 
-    const {
-        token, amount, user_identifier
-    } = result.data;
+  const { token, amount, user_identifier } = result.data;
 
-    const payoutTransactionStatus = await db.payout.findUnique({
+  const payoutTransactionStatus = await db.payout.findUnique({
+    where: {
+      token,
+    },
+  });
+
+  if (payoutTransactionStatus?.status == "Success") {
+    res.json({
+      message: "Invalid token",
+    });
+    return;
+  }
+
+  try {
+    await db.$transaction([
+      db.balance.update({
         where: {
-            token
-        }
-    })
+          merchantId: Number(user_identifier),
+        },
+        data: {
+          locked: {
+            decrement: Number(amount),
+          },
+          amount: {
+            decrement: Number(amount),
+          },
+        },
+      }),
+      db.payout.updateMany({
+        where: {
+          token,
+        },
+        data: {
+          status: "Success",
+        },
+      }),
+    ]);
 
-    if (payoutTransactionStatus?.status == "Success") {
-        res.json({
-            message: "Invalid token"
+    res.json({
+      message: "Captured",
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(411).json({
+      message: "Error while processing webhook",
+    });
+  }
+});
 
-        })
-        return
-    }
-
-    try {
-        await db.$transaction([
-            db.balance.update({
-                where: {
-                    merchantId: Number(user_identifier)
-                },
-                data: {
-                    locked: {
-                        decrement: Number(amount)
-                    },
-                    amount: {
-                        decrement: Number(amount)
-                    }
-                }
-            }),
-            db.payout.updateMany({
-                where: {
-                    token
-                },
-                data: {
-                    status: "Success",
-                }
-            })
-        ]);
-
-        res.json({
-            message: "Captured"
-        })
-    } catch (e) {
-        console.error(e);
-        res.status(411).json({
-            message: "Error while processing webhook"
-        })
-    }
-})
-
-const port = 3003
+const port = 3003;
 app.listen(port, () => {
-    console.log("Server is running at port", port)
+  console.log("Server is running at port", port);
 });

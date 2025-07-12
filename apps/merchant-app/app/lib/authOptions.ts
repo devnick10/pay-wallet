@@ -18,12 +18,12 @@ export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || ""
-    })
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
   ],
   secret: process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: '/signin'
+    signIn: "/signin",
   },
   callbacks: {
     async signIn(params) {
@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
           }
 
           const existingUser = await prisma.merchant.findUnique({
-            where: { email: user.email }
+            where: { email: user.email },
           });
 
           if (!existingUser) {
@@ -46,23 +46,23 @@ export const authOptions: NextAuthOptions = {
                   email: user.email as string,
                   auth_type: "Google",
                   name: user.name || "",
-                }
+                },
               });
               await prisma.balance.create({
                 data: {
                   amount: 0,
                   locked: 0,
                   merchantId: newMerchant.id,
-                }
-              })
-              return newMerchant
-            })
+                },
+              });
+              return newMerchant;
+            });
 
-            user.id = String(merchant.id)
-            return true
+            user.id = String(merchant.id);
+            return true;
           }
-          user.id = String(existingUser.id)
-          return true
+          user.id = String(existingUser.id);
+          return true;
         } catch (error) {
           console.error("Error during Google sign-in:", error);
           return false;
@@ -76,11 +76,11 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    async session({ session, token }: { session: Session, token: JWT }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (session.user) {
         session.user.id = token.sub || "";
       }
       return session;
-    }
-  }
+    },
+  },
 };

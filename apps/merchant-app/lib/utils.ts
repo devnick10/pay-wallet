@@ -1,17 +1,25 @@
-import { clsx, type ClassValue } from "clsx"
-import { BarChart3, DollarSign, History, Home, QrCode, Settings, Store } from "lucide-react";
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import {
+  BarChart3,
+  DollarSign,
+  History,
+  Home,
+  QrCode,
+  Settings,
+  Store,
+} from "lucide-react";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 type SidebarNavItem = {
-  title: string
-  href: string
-  icon: React.ComponentType<{ className?: string }>
-}
+  title: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+};
 
-export const sidebarNavItems:SidebarNavItem[] = [
+export const sidebarNavItems: SidebarNavItem[] = [
   {
     title: "Dashboard",
     href: "/dashboard",

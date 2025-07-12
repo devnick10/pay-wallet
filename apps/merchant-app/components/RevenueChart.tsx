@@ -1,9 +1,21 @@
-"use client"
+"use client";
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
-export function RevenueChart({ data }: { data: { timestamp: string, amount: number }[] }) {
-  const chartData = data.map(item => ({
+export function RevenueChart({
+  data,
+}: {
+  data: { timestamp: string; amount: number }[];
+}) {
+  const chartData = data.map((item) => ({
     date: new Date(item.timestamp).toLocaleDateString(),
     amount: item.amount / 100,
   }));

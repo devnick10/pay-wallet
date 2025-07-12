@@ -1,73 +1,81 @@
-"use client"
+"use client";
 
-import { getMerchantInfo } from "@/actions/getUserInfo"
-import { updateProfile } from "@/actions/updateProfile"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { toast } from "@/hooks/use-toast"
-import { UpdateMerchantData } from "@/lib/types"
-import { useMerchantInfo } from "@repo/store/merchant"
-import { useDispatch } from "@repo/store/utils"
-import { CreditCard, Save, User, Wallet } from "lucide-react"
-import { useEffect, useState } from "react"
-import { setMerchantInfo } from "@repo/store/merchant"
+import { getMerchantInfo } from "@/actions/getUserInfo";
+import { updateProfile } from "@/actions/updateProfile";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/hooks/use-toast";
+import { UpdateMerchantData } from "@/lib/types";
+import { useMerchantInfo } from "@repo/store/merchant";
+import { useDispatch } from "@repo/store/utils";
+import { CreditCard, Save, User, Wallet } from "lucide-react";
+import { useEffect, useState } from "react";
+import { setMerchantInfo } from "@repo/store/merchant";
 
 export default function MerchantSettingsPage() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [personalInfo, setPersonalInfo] = useState<UpdateMerchantData>({
     name: "",
     email: "",
-    number: ""
-  })
+    number: "",
+  });
 
-  const dispatch = useDispatch()
-  const { merchantInfo } = useMerchantInfo()
-
+  const dispatch = useDispatch();
+  const { merchantInfo } = useMerchantInfo();
 
   const updatePersonalInfo = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const { success } = await updateProfile(personalInfo)
+      const { success } = await updateProfile(personalInfo);
       if (success) {
         toast({
-          description: "Profile update successfully"
-        })
+          description: "Profile update successfully",
+        });
       }
     } catch (error) {
       console.error(error);
       toast({
-        description: "Internal server error"
-      })
+        description: "Internal server error",
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const updateBusinessInfo = () => {
     // Simulate API call
-    setIsLoading(false)
+    setIsLoading(false);
     setTimeout(() => {
-      setIsLoading(false)
-      alert("Settings saved successfully!")
-    }, 1000)
-  }
+      setIsLoading(false);
+      alert("Settings saved successfully!");
+    }, 1000);
+  };
   useEffect(() => {
-    getMerchantInfo().then(data => {
+    getMerchantInfo().then((data) => {
       if (data.success && data.data) {
-        dispatch(setMerchantInfo(data.data))
+        dispatch(setMerchantInfo(data.data));
       }
-    })
-  }, [dispatch])
+    });
+  }, [dispatch]);
 
   return (
     <div className="flex flex-col gap-6 p-4 md:gap-8 md:p-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Account Settings</h1>
-        <p className="text-muted-foreground">Manage your merchant account settings and preferences.</p>
+        <p className="text-muted-foreground">
+          Manage your merchant account settings and preferences.
+        </p>
       </div>
 
       <Tabs defaultValue="profile" className="w-full">
@@ -93,31 +101,51 @@ export default function MerchantSettingsPage() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Full Name</Label>
-                  <Input id="fullName"
+                  <Input
+                    id="fullName"
                     placeholder={merchantInfo.name || ""}
-                    onChange={(e) => (
-                      setPersonalInfo(prev => ({ ...prev, name: e.target.value }))
-                    )} />
+                    onChange={(e) =>
+                      setPersonalInfo((prev) => ({
+                        ...prev,
+                        name: e.target.value,
+                      }))
+                    }
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
-                  <Input id="email" type="email"
+                  <Input
+                    id="email"
+                    type="email"
                     placeholder={merchantInfo.email}
-                    onChange={(e) => (
-                      setPersonalInfo(prev => ({ ...prev, email: e.target.value }))
-                    )} />
+                    onChange={(e) =>
+                      setPersonalInfo((prev) => ({
+                        ...prev,
+                        email: e.target.value,
+                      }))
+                    }
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone"
+                  <Input
+                    id="phone"
                     placeholder={merchantInfo.number || "Phone Number"}
-                    onChange={(e) => (
-                      setPersonalInfo(prev => ({ ...prev, number: e.target.value }))
-                    )} />
+                    onChange={(e) =>
+                      setPersonalInfo((prev) => ({
+                        ...prev,
+                        number: e.target.value,
+                      }))
+                    }
+                  />
                 </div>
               </CardContent>
               <CardFooter>
-                <Button onClick={updatePersonalInfo} disabled={isLoading} className="ml-auto">
+                <Button
+                  onClick={updatePersonalInfo}
+                  disabled={isLoading}
+                  className="ml-auto"
+                >
                   {isLoading ? "Saving..." : "Save Changes"}
                 </Button>
               </CardFooter>
@@ -135,7 +163,11 @@ export default function MerchantSettingsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="businessEmail">Business Email</Label>
-                  <Input id="businessEmail" type="email" defaultValue="info@cafesunshine.com" />
+                  <Input
+                    id="businessEmail"
+                    type="email"
+                    defaultValue="info@cafesunshine.com"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="businessPhone">Business Phone</Label>
@@ -147,7 +179,11 @@ export default function MerchantSettingsPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button onClick={updateBusinessInfo} disabled={isLoading} className="ml-auto">
+                <Button
+                  onClick={updateBusinessInfo}
+                  disabled={isLoading}
+                  className="ml-auto"
+                >
                   {isLoading ? "Saving..." : "Save Changes"}
                 </Button>
               </CardFooter>
@@ -155,14 +191,15 @@ export default function MerchantSettingsPage() {
           </div>
         </TabsContent>
 
-
         {/* Payment Tab */}
         <TabsContent value="payment" className="mt-6">
           <div className="grid gap-6 md:grid-cols-2">
             <Card>
               <CardHeader>
                 <CardTitle>Bank Account</CardTitle>
-                <CardDescription>Manage your payout bank account</CardDescription>
+                <CardDescription>
+                  Manage your payout bank account
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="rounded-lg border p-4">
@@ -173,7 +210,9 @@ export default function MerchantSettingsPage() {
                       </div>
                       <div>
                         <p className="font-medium">HDFC Bank</p>
-                        <p className="text-sm text-muted-foreground">Account ending in 4321</p>
+                        <p className="text-sm text-muted-foreground">
+                          Account ending in 4321
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -189,7 +228,10 @@ export default function MerchantSettingsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="accountNumber">Account Number</Label>
-                  <Input id="accountNumber" defaultValue="XXXX XXXX XXXX 4321" />
+                  <Input
+                    id="accountNumber"
+                    defaultValue="XXXX XXXX XXXX 4321"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="ifsc">IFSC Code</Label>
@@ -197,7 +239,11 @@ export default function MerchantSettingsPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button onClick={updateBusinessInfo} disabled={isLoading} className="ml-auto">
+                <Button
+                  onClick={updateBusinessInfo}
+                  disabled={isLoading}
+                  className="ml-auto"
+                >
                   {isLoading ? "Saving..." : "Save Changes"}
                 </Button>
               </CardFooter>
@@ -206,27 +252,35 @@ export default function MerchantSettingsPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Payout Schedule</CardTitle>
-                <CardDescription>Manage when you receive your payouts</CardDescription>
+                <CardDescription>
+                  Manage when you receive your payouts
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label>Daily Payouts</Label>
-                    <p className="text-sm text-muted-foreground">Receive payouts every day</p>
+                    <p className="text-sm text-muted-foreground">
+                      Receive payouts every day
+                    </p>
                   </div>
                   <Switch defaultChecked />
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label>Weekly Payouts</Label>
-                    <p className="text-sm text-muted-foreground">Receive payouts every week</p>
+                    <p className="text-sm text-muted-foreground">
+                      Receive payouts every week
+                    </p>
                   </div>
                   <Switch />
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label>Monthly Payouts</Label>
-                    <p className="text-sm text-muted-foreground">Receive payouts every month</p>
+                    <p className="text-sm text-muted-foreground">
+                      Receive payouts every month
+                    </p>
                   </div>
                   <Switch />
                 </div>
@@ -259,5 +313,5 @@ export default function MerchantSettingsPage() {
         </Button>
       </div>
     </div>
-  )
+  );
 }

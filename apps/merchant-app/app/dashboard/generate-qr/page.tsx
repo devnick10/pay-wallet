@@ -1,9 +1,7 @@
-import GenerateQRPage from '@/components/pages/QrgeneratorPage'
+import GenerateQRPage from "@/components/pages/QrgeneratorPage";
 
 function page() {
-  return (
-    <GenerateQRPage />
-  )
+  return <GenerateQRPage />;
 }
 
-export default page
+export default page;

@@ -1,10 +1,8 @@
-import React from 'react'
-import PayoutsPage from '@/components/pages/PayoutPage'
+import React from "react";
+import PayoutsPage from "@/components/pages/PayoutPage";
 
 const page = () => {
-  return (
-    <PayoutsPage/>
-  )
-}
+  return <PayoutsPage />;
+};
 
-export default page
+export default page;

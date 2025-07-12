@@ -1,31 +1,29 @@
-
-
 export interface P2PTransfer {
-    id: number;
-    amount: number;
-    timestamp: Date;
-    fromUser: {
-        number?: string;
-        name: string | null;
-    };
+  id: number;
+  amount: number;
+  timestamp: Date;
+  fromUser: {
+    number?: string;
+    name: string | null;
+  };
 }
 
-type OnRampStatus = "Success" | "Failure" | "Processing"
+type OnRampStatus = "Success" | "Failure" | "Processing";
 
 export interface Payouts {
-    id: number;
-    status: OnRampStatus;
-    token: string;
-    provider: string;
-    amount: number;
-    startTime: Date;
-    merchantId: number | null;
+  id: number;
+  status: OnRampStatus;
+  token: string;
+  provider: string;
+  amount: number;
+  startTime: Date;
+  merchantId: number | null;
 }
 
 export interface UpdateMerchantData {
-    name?: string;
-    email?: string;
-    number?: string;
+  name?: string;
+  email?: string;
+  number?: string;
 }
 
 export enum StoreCategory {
@@ -34,7 +32,7 @@ export enum StoreCategory {
   SERVICES = "Services",
   GROCERY = "Grocery",
   ELECTRONICS = "Electronics",
-  OTHER = "Other"
+  OTHER = "Other",
 }
 
 export interface StoreData {
@@ -43,8 +41,7 @@ export interface StoreData {
   category: StoreCategory;
 }
 
-
 export interface RevenueData {
-  data: { timestamp: string; amount: number }[]
-  success: boolean
+  data: { timestamp: string; amount: number }[];
+  success: boolean;
 }

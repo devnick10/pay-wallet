@@ -1,10 +1,10 @@
-import MerchantLoginPage from '@/components/sigin'
-import React from 'react'
+import MerchantLoginPage from "@/components/sigin";
+import React from "react";
 
 export default function page() {
   return (
     <div>
-      <MerchantLoginPage/>
+      <MerchantLoginPage />
     </div>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import Link from "next/link"
-import { FileQuestion, Home } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import Link from "next/link";
+import { FileQuestion, Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
@@ -11,7 +11,8 @@ export default function NotFound() {
         </div>
         <h1 className="text-4xl font-bold">Page Not Found</h1>
         <p className="text-muted-foreground">
-          We couldn&apos;t find the page you&apos;re looking for. The page might have been moved or deleted.
+          We couldn&apos;t find the page you&apos;re looking for. The page might
+          have been moved or deleted.
         </p>
         <Link href="/">
           <Button>
@@ -21,5 +22,5 @@ export default function NotFound() {
         </Link>
       </div>
     </div>
-  )
+  );
 }
