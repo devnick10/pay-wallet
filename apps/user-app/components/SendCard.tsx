@@ -33,6 +33,7 @@ export default function SendCard() {
         setNumber("");
         setAmount(0);
         toast.success(message);
+        return
       }
       toast.success(message || "Internal server error");
     } catch (error) {

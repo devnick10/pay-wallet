@@ -6,12 +6,15 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, CreditCard } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function LoginPage() {
+  const [loading,setLoading] = useState(false);
   const { toast } = useToast();
 
   const handleGoogleSignIn = async () => {
     try {
+      setLoading(true);
       const signInResponse = await signIn("google", {
         callbackUrl: "/dashboard?signinSuccess=1",
       });
@@ -32,6 +35,8 @@ export default function LoginPage() {
         variant: "destructive",
         title: "Signin failed, please try again.",
       });
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -61,6 +66,7 @@ export default function LoginPage() {
           <div className="space-y-4">
             <div className="grid  gap-4">
               <Button
+                disabled={loading}
                 onClick={handleGoogleSignIn}
                 variant="default"
                 className="w-full text-md"
@@ -81,7 +87,7 @@ export default function LoginPage() {
                     ></path>
                   </svg>
                 </div>
-                Google
+                {loading?"Proccessing...":"Google"}
               </Button>
             </div>
           </div>
