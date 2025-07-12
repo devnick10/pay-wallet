@@ -1,21 +1,27 @@
-"use client"
+"use client";
 
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Filter, Search } from "lucide-react"
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Filter, Search } from "lucide-react";
 
 interface SearchBarProps {
-  searchTerm: string
-  filterType?: string
-  onSearchChange: (value: string) => void
-  onFilterChange?: (value: string) => void
+  searchTerm: string;
+  filterType?: string;
+  onSearchChange: (value: string) => void;
+  onFilterChange?: (value: string) => void;
 }
 
 export function SearchBar({
   searchTerm,
   filterType,
   onSearchChange,
-  onFilterChange
+  onFilterChange,
 }: SearchBarProps) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row">
@@ -43,5 +49,5 @@ export function SearchBar({
         </Select>
       </div>
     </div>
-  )
+  );
 }

@@ -30,7 +30,6 @@ export default function RootLayout({
           >
             <Toaster />
             {children}
-
           </ThemeProvider>
         </body>
       </Provider>

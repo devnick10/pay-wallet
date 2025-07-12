@@ -1,10 +1,8 @@
-import React from 'react'
-import WalletHistoryPage from '@/components/pages/WalletHistoryPage'
+import React from "react";
+import WalletHistoryPage from "@/components/pages/WalletHistoryPage";
 
 function page() {
-  return (
-    <WalletHistoryPage />
-  )
+  return <WalletHistoryPage />;
 }
 
-export default page
+export default page;

@@ -1,56 +1,76 @@
-'use client'
-import { getBalance } from "@/actions/getBalance"
-import { getP2pTransactions } from "@/actions/getP2pTransactions"
-import { TransactionsTable } from "@/components/TransactionsTable"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight, CreditCard, History, Send, Wallet } from "lucide-react"
-import { useSession } from "next-auth/react"
-import Link from "next/link"
-import { useEffect, useMemo } from "react"
-import { setamount, setlockedamout, setP2pTransactions, useBalance, useP2pTransactions, } from "@repo/store/user"
-import { useDispatch } from "@repo/store/utils"
+"use client";
+import { getBalance } from "@/actions/getBalance";
+import { getP2pTransactions } from "@/actions/getP2pTransactions";
+import { TransactionsTable } from "@/components/TransactionsTable";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ArrowRight, CreditCard, History, Send, Wallet } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useEffect, useMemo } from "react";
+import {
+  setamount,
+  setlockedamout,
+  setP2pTransactions,
+  useBalance,
+  useP2pTransactions,
+} from "@repo/store/user";
+import { useDispatch } from "@repo/store/utils";
 
 export default function DashboardPage() {
+  const session = useSession();
 
-  const session = useSession()
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const balance = useBalance();
-  const transactions = useP2pTransactions()
+  const transactions = useP2pTransactions();
 
   useEffect(() => {
-    Promise.all([
-      getBalance(),
-      getP2pTransactions()
-    ]).then(([balance, p2p]) => {
-      dispatch(setP2pTransactions(p2p))
-      dispatch(setamount(balance.amount)),
-      dispatch(setlockedamout(balance.locked))
-    }).catch((err) => {
-      console.error(err)
-    })
-  }, [dispatch])
+    Promise.all([getBalance(), getP2pTransactions()])
+      .then(([balance, p2p]) => {
+        dispatch(setP2pTransactions(p2p));
+        dispatch(setamount(balance.amount)),
+          dispatch(setlockedamout(balance.locked));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [dispatch]);
 
   const { totalRecvied, totalSent } = useMemo(() => {
-    const totalSent = transactions.filter(txn => txn.fromUser.id === Number(session?.data?.user.id))
-      .reduce((sum, txn) => sum + txn.amount, 0) / 100
-    const totalRecvied = transactions.filter(txn => txn.fromUser.id !== Number(session?.data?.user.id))
-      .reduce((sum, txn) => sum + txn.amount, 0) / 100
-    return { totalSent, totalRecvied }
-  }, [transactions])
+    const totalSent =
+      transactions
+        .filter((txn) => txn.fromUser.id === Number(session?.data?.user.id))
+        .reduce((sum, txn) => sum + txn.amount, 0) / 100;
+    const totalRecvied =
+      transactions
+        .filter((txn) => txn.fromUser.id !== Number(session?.data?.user.id))
+        .reduce((sum, txn) => sum + txn.amount, 0) / 100;
+    return { totalSent, totalRecvied };
+  }, [transactions]);
 
-  if (!session?.data?.user || !session?.data?.user.email) return
+  if (!session?.data?.user || !session?.data?.user.email) return;
   return (
     <div className="flex w-full flex-col gap-6 p-4 md:gap-8 md:p-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back,{session.data.user.name}! Here&apos;s an overview of your wallet.</p>
+        <p className="text-muted-foreground">
+          Welcome back,{session.data.user.name}! Here&apos;s an overview of your
+          wallet.
+        </p>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Wallet Balance</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Wallet Balance
+            </CardTitle>
             <Wallet className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -68,7 +88,9 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Received</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Received
+            </CardTitle>
             <ArrowRight className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -129,5 +151,5 @@ export default function DashboardPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

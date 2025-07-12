@@ -1,82 +1,111 @@
-"use client"
+"use client";
 
-import { updatePassword } from "@/actions/updatePassword"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { ChangeEvent, useState } from "react"
-import toast from "react-hot-toast"
+import { updatePassword } from "@/actions/updatePassword";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ChangeEvent, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function UpdatePasswordCard() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
-    confirmPassowrd: ""
-  })
+    confirmPassowrd: "",
+  });
 
   const handlePasswordUpdate = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     if (
-      !passwordData || !passwordData.confirmPassowrd || !passwordData.newPassword ||
+      !passwordData ||
+      !passwordData.confirmPassowrd ||
+      !passwordData.newPassword ||
       passwordData.newPassword !== passwordData.confirmPassowrd
     ) {
-      return toast.error("Please verify credentials")
+      return toast.error("Please verify credentials");
     }
     try {
-      const { message, success } = await updatePassword(passwordData)
-      if (success) toast.success(message)
+      const { message, success } = await updatePassword(passwordData);
+      if (success) toast.success(message);
       setPasswordData({
         currentPassword: "",
         newPassword: "",
-        confirmPassowrd: ""
-      })
+        confirmPassowrd: "",
+      });
     } catch (error) {
-      console.error(error)
-      toast.error("User detailed failed to update.")
+      console.error(error);
+      toast.error("User detailed failed to update.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Card>
-        <CardHeader>
+      <CardHeader>
         <CardTitle>Change Password</CardTitle>
-        <CardDescription>Update your password regularly for better security</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+        <CardDescription>
+          Update your password regularly for better security
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
         <div className="space-y-2">
-            <Label htmlFor="currentPassword">Current Password</Label>
-            <Input
+          <Label htmlFor="currentPassword">Current Password</Label>
+          <Input
             value={passwordData.currentPassword}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setPasswordData((prev) => ({
+                ...prev,
+                currentPassword: e.target.value,
+              }))
+            }
             id="currentPassword"
-            type="password" />
+            type="password"
+          />
         </div>
         <div className="space-y-2">
-            <Label htmlFor="newPassword">New Password</Label>
-            <Input
+          <Label htmlFor="newPassword">New Password</Label>
+          <Input
             value={passwordData.newPassword}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setPasswordData((prev) => ({
+                ...prev,
+                newPassword: e.target.value,
+              }))
+            }
             id="newPassword"
-            type="password" />
+            type="password"
+          />
         </div>
         <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm New Password</Label>
-            <Input
+          <Label htmlFor="confirmPassword">Confirm New Password</Label>
+          <Input
             value={passwordData.confirmPassowrd}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setPasswordData(prev => ({ ...prev, confirmPassowrd: e.target.value }))}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setPasswordData((prev) => ({
+                ...prev,
+                confirmPassowrd: e.target.value,
+              }))
+            }
             id="confirmPassword"
-            type="password" />
+            type="password"
+          />
         </div>
-        </CardContent>
-        <CardFooter>
+      </CardContent>
+      <CardFooter>
         <Button onClick={handlePasswordUpdate} className="ml-auto">
-            {isLoading ? "Updating" :"Update Password"}
+          {isLoading ? "Updating" : "Update Password"}
         </Button>
-        </CardFooter>
+      </CardFooter>
     </Card>
-  )
+  );
 }

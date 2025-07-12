@@ -1,6 +1,6 @@
-"use server"
+"use server";
 import { authOptions } from "@/app/lib/authOptions";
-import prisma from "@repo/db/client"
+import prisma from "@repo/db/client";
 import { getServerSession } from "next-auth";
 
 interface UpdateUserData {
@@ -18,7 +18,7 @@ export const updateUser = async (data: UpdateUserData) => {
 
     await prisma.user.update({
       where: { id: Number(session?.user.id) },
-      data: updatePayload
+      data: updatePayload,
     });
 
     return {
@@ -29,7 +29,7 @@ export const updateUser = async (data: UpdateUserData) => {
     console.error("User update error:", error);
     return {
       success: false,
-      message: "Failed to update user"
+      message: "Failed to update user",
     };
   }
-}
+};

@@ -1,10 +1,8 @@
-import AddMoneyPage from '@/components/pages/AddMoneyPage'
-import React from 'react'
+import AddMoneyPage from "@/components/pages/AddMoneyPage";
+import React from "react";
 
 function page() {
-  return (
-    <AddMoneyPage />
-  )
+  return <AddMoneyPage />;
 }
 
-export default page
+export default page;

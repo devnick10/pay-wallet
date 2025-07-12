@@ -1,8 +1,15 @@
-"use client"
+"use client";
 
 import { getOnRampTransactions } from "@/actions/getOnRampTransactions";
 import { SearchBar } from "@/components/SearchBar";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { setOnRampTxns, useOnRampTxns } from "@repo/store/user";
 import { useDispatch } from "@repo/store/utils";
 import { useEffect, useState } from "react";
@@ -10,7 +17,7 @@ import { useEffect, useState } from "react";
 export function OnRampTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const transactions = useOnRampTxns().onRampTxns;
 
   useEffect(() => {
@@ -18,14 +25,14 @@ export function OnRampTable() {
       setIsLoading(true);
       try {
         const data = await getOnRampTransactions();
-        dispatch(setOnRampTxns(data))
+        dispatch(setOnRampTxns(data));
       } catch (error) {
         console.error("Failed to fetch transactions:", error);
       } finally {
         setIsLoading(false);
       }
     }
-    loadTransactions()
+    loadTransactions();
   }, [dispatch]);
 
   const filteredTransactions = transactions.filter((transaction) => {
@@ -61,10 +68,7 @@ export function OnRampTable() {
 
   return (
     <div className="flex flex-col gap-4">
-      <SearchBar
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-      />
+      <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
       <div className="rounded-md border">
         <Table>
           <TableHeader className="">
@@ -86,14 +90,20 @@ export function OnRampTable() {
             ) : filteredTransactions.length > 0 ? (
               filteredTransactions.map((transaction) => (
                 <TableRow key={transaction.id}>
-                  <TableCell className="font-medium">TX-{transaction.id}</TableCell>
+                  <TableCell className="font-medium">
+                    TX-{transaction.id}
+                  </TableCell>
                   <TableCell>{formatDate(transaction.time)}</TableCell>
-                  <TableCell className="capitalize">{transaction.provider}</TableCell>
+                  <TableCell className="capitalize">
+                    {transaction.provider}
+                  </TableCell>
                   <TableCell className="text-right">
                     ₹{(transaction.amount / 100).toLocaleString("en-IN")}
                   </TableCell>
                   <TableCell>
-                    <div className={`flex w-fit items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getStatusBadge(transaction.status)}`}>
+                    <div
+                      className={`flex w-fit items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getStatusBadge(transaction.status)}`}
+                    >
                       {transaction.status}
                     </div>
                   </TableCell>

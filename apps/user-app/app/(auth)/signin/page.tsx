@@ -1,21 +1,21 @@
-"use client"
-import { ThemeToggle } from "@/components/ThemeToggle"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { ArrowLeft, CreditCard, Eye, EyeOff } from "lucide-react"
-import { signIn } from "next-auth/react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import toast from "react-hot-toast"
+"use client";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ArrowLeft, CreditCard, Eye, EyeOff } from "lucide-react";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [phoneNumber, setPhoneNumber] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
-  const [name, setName] = useState<string>("")
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [loading,setLoading] = useState(false);
   const router = useRouter();
 
   async function handleSignin() {
@@ -25,18 +25,21 @@ export default function LoginPage() {
     }
 
     try {
+      setLoading(true)
       const result = await signIn("credentials", {
         redirect: false,
         name,
         phone: phoneNumber,
         password,
-        callbackUrl: "/dashboard"
+        callbackUrl: "/dashboard",
       });
 
       if (result?.error) {
-        toast.error(result.error === "CredentialsSignin"
-          ? "Invalid credentials"
-          : result.error);
+        toast.error(
+          result.error === "CredentialsSignin"
+            ? "Invalid credentials"
+            : result.error,
+        );
         return;
       }
 
@@ -52,6 +55,8 @@ export default function LoginPage() {
     } catch (error) {
       console.error("Sign in error:", error);
       toast.error("An unexpected error occurred");
+    }finally{
+      setLoading(false)
     }
   }
 
@@ -74,7 +79,9 @@ export default function LoginPage() {
               <span className="text-xl font-bold">PayWallet</span>
             </div>
             <h1 className="text-2xl font-bold">Welcome back</h1>
-            <p className="text-sm text-muted-foreground">Enter your credentials to access your account</p>
+            <p className="text-sm text-muted-foreground">
+              Enter your credentials to access your account
+            </p>
           </div>
           <div className="space-y-4">
             <div className="space-y-2">
@@ -122,12 +129,14 @@ export default function LoginPage() {
                   ) : (
                     <Eye className="h-4 w-4 text-muted-foreground" />
                   )}
-                  <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
+                  <span className="sr-only">
+                    {showPassword ? "Hide password" : "Show password"}
+                  </span>
                 </Button>
               </div>
             </div>
-            <Button onClick={handleSignin} className="w-full">
-              Sign In
+            <Button disabled={loading} onClick={handleSignin} className="w-full">
+               {loading?"Proccessing...":"Sign In"}
             </Button>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -138,7 +147,10 @@ export default function LoginPage() {
               </div>
             </div>
             <div className="text-center text-sm">
-              <Link href="/forget-password" className="text-primary underline-offset-4 hover:underline">
+              <Link
+                href="/forget-password"
+                className="text-primary underline-offset-4 hover:underline"
+              >
                 Forgot your password?
               </Link>
             </div>
@@ -146,5 +158,5 @@ export default function LoginPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }
