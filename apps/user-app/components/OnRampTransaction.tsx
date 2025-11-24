@@ -23,7 +23,7 @@ export const OnRampTransactions = () => {
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+  }, [dispatch]);
 
   if (!onRampTxns.length) {
     return (

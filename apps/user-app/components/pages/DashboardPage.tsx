@@ -19,15 +19,13 @@ import {
   setamount,
   setlockedamout,
   setP2pTransactions,
-  useBalance,
-  useP2pTransactions,
-} from "@repo/store/user";
-import { useDispatch } from "@repo/store/utils";
+} from "@repo/store/userReducers";
+import { useBalance, useP2pTransactions, useAppDispatch } from "@repo/store/userHooks";
 
 export default function DashboardPage() {
   const session = useSession();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const balance = useBalance();
   const transactions = useP2pTransactions();
 
@@ -35,8 +33,8 @@ export default function DashboardPage() {
     Promise.all([getBalance(), getP2pTransactions()])
       .then(([balance, p2p]) => {
         dispatch(setP2pTransactions(p2p));
-        dispatch(setamount(balance.amount)),
-          dispatch(setlockedamout(balance.locked));
+        dispatch(setamount(balance.amount));
+        dispatch(setlockedamout(balance.locked));
       })
       .catch((err) => {
         console.error(err);
@@ -53,7 +51,7 @@ export default function DashboardPage() {
         .filter((txn) => txn.fromUser.id !== Number(session?.data?.user.id))
         .reduce((sum, txn) => sum + txn.amount, 0) / 100;
     return { totalSent, totalRecvied };
-  }, [transactions]);
+  }, [transactions,session]);
 
   if (!session?.data?.user || !session?.data?.user.email) return;
   return (
