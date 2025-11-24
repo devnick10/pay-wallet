@@ -9,12 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { setP2pTransactions, useP2pTransactions } from "@repo/store/user";
-import { useDispatch } from "@repo/store/utils";
+import { setP2pTransactions } from "@repo/store/userReducers";
 import { ArrowDownLeft } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { SearchBar } from "./SearchBar";
+import { useAppDispatch, useP2pTransactions } from "@repo/store/userHooks";
 
 export function TransactionsTable({
   dateNone,
@@ -28,7 +28,7 @@ export function TransactionsTable({
     "all",
   );
   const currentUserNumber = useSession().data?.user.email;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const txns = useP2pTransactions();
   let transfers;
   if (recentp2p) {

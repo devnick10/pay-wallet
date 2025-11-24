@@ -1,10 +1,22 @@
 "use client";
-import { StateProvider, userStore } from "@repo/store/utils";
 import { SessionProvider } from "next-auth/react";
+import StoreProvider from "./components/storeProvider";
+import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "next-themes";
 export const Provider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <StateProvider store={userStore}>
-      <SessionProvider>{children}</SessionProvider>
-    </StateProvider>
+    <StoreProvider>
+      <SessionProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+        </ThemeProvider>
+      </SessionProvider>
+    </StoreProvider>
   );
 };

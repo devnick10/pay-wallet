@@ -10,14 +10,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { setTransactions, useTransactions } from "@repo/store/merchant";
-import { useDispatch } from "@repo/store/utils";
+import { useAppDispatch, useTransactions } from "@repo/store/merchantHooks";
+import { setTransactions } from "@repo/store/merchantReducers";
 import { QrCode } from "lucide-react";
 import { useEffect, useMemo } from "react";
 
 export default function TransactionsPage() {
   const transactions = useTransactions();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     getTotalTransactions()

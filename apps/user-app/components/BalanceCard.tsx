@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { useBalance } from "@repo/store/user";
+import { useBalance } from "@repo/store/userHooks";
 import { Wallet } from "lucide-react";
 import { useMemo } from "react";
 

@@ -17,11 +17,10 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import { UpdateMerchantData } from "@/lib/types";
-import { useMerchantInfo } from "@repo/store/merchant";
-import { useDispatch } from "@repo/store/utils";
+import { useMerchantInfo, useAppDispatch } from "@repo/store/merchantHooks";
 import { CreditCard, Save, User, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
-import { setMerchantInfo } from "@repo/store/merchant";
+import { setMerchantInfo } from "@repo/store/merchantReducers";
 
 export default function MerchantSettingsPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +30,7 @@ export default function MerchantSettingsPage() {
     number: "",
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { merchantInfo } = useMerchantInfo();
 
   const updatePersonalInfo = async () => {

@@ -20,8 +20,8 @@ import {
 } from "./ui/select";
 import { createOnRampTransaction } from "@/actions/onRampTransaction";
 import toast from "react-hot-toast";
-import { useDispatch } from "@repo/store/utils";
-import { addOnRampTxns } from "@repo/store/user";
+import { useAppDispatch } from "@repo/store/userHooks";
+import { addOnRampTxns } from "@repo/store/userReducers";
 
 const SUPPORTED_BANKS = [
   {
@@ -42,7 +42,7 @@ export const AddMoney = () => {
   const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
   const [isLoading, setIsLoading] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleAddMoney = async () => {
     if (!amount || !provider) return;
 

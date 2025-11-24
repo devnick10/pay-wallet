@@ -7,12 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { setOnRampTxns, useOnRampTxns } from "@repo/store/user";
-import { useDispatch } from "@repo/store/utils";
+import { setOnRampTxns } from "@repo/store/userReducers";
+import { useOnRampTxns, useAppDispatch } from "@repo/store/userHooks";
 import { useEffect } from "react";
 
 export const OnRampTransactions = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { onRampTxns } = useOnRampTxns();
 
   useEffect(() => {

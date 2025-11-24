@@ -36,7 +36,7 @@ cd paytm-app
 ### 2️⃣ Install Dependencies
 
 ```sh
-npm install
+yarn install
 ```
 
 ### 3️⃣ Set Up Environment Variables
@@ -52,7 +52,7 @@ npx prisma migrate dev
 ### 5️⃣ Start the Development Server
 
 ```sh
-npm run dev
+yarn run dev
 ```
 
 ## 📌 Features

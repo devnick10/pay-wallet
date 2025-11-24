@@ -10,14 +10,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { setOnRampTxns, useOnRampTxns } from "@repo/store/user";
-import { useDispatch } from "@repo/store/utils";
+import { useOnRampTxns } from "@repo/store/userHooks";
+import { setOnRampTxns } from "@repo/store/userReducers";
+import { useAppDispatch } from "@repo/store/userHooks";
 import { useEffect, useState } from "react";
 
 export function OnRampTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const transactions = useOnRampTxns().onRampTxns;
 
   useEffect(() => {

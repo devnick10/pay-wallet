@@ -6,9 +6,24 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "exports": {
-    "./merchant": "./src/merchant.ts",
-    "./user": "./src/user.ts",
-    "./utils":"./src/index.ts"
+    "./userStore": {
+      "import": "./src/store/userStore/store.ts"
+    },
+    "./userReducers": {
+      "import": "./src/store/userStore/userReducers.ts"
+    },
+    "./merchantStore": {
+      "import": "./src/store/merchantStore/store.ts"
+    },
+    "./merchantReducers": {
+      "import": "./src/store/merchantStore/merchantReducers.ts"
+    },
+    "./userHooks": {
+      "import": "./src/hooks/userhooks/index.ts"
+    },
+    "./merchantHooks": {
+      "import": "./src/hooks/merchanthooks/index.ts"
+    }
   },
   "keywords": [],
   "author": "",

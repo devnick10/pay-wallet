@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { addP2pTransaction } from "@repo/store/user";
-import { useDispatch } from "@repo/store/utils";
+import { addP2pTransaction } from "@repo/store/userReducers";
+import { useAppDispatch } from "@repo/store/userHooks";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -20,7 +20,7 @@ export default function SendCard() {
   const [number, setNumber] = useState("");
   const [amount, setAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleSendMoney = async () => {
     if (!number || !amount) return;
@@ -33,7 +33,7 @@ export default function SendCard() {
         setNumber("");
         setAmount(0);
         toast.success(message);
-        return
+        return;
       }
       toast.success(message || "Internal server error");
     } catch (error) {

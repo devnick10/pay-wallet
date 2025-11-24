@@ -1,11 +1,11 @@
 "use client";
-import { merchantStore, StateProvider } from "@repo/store/utils";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
+import StoreProvider from "./components/storeProvider";
 import { Toaster } from "./components/ui/toaster";
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <StateProvider store={merchantStore}>
+    <StoreProvider>
       <SessionProvider>
         <ThemeProvider
           attribute="class"
@@ -17,6 +17,6 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
           {children}
         </ThemeProvider>
       </SessionProvider>
-    </StateProvider>
+    </StoreProvider>
   );
 };

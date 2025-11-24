@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function LoginPage() {
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
   const handleGoogleSignIn = async () => {
@@ -35,7 +35,7 @@ export default function LoginPage() {
         variant: "destructive",
         title: "Signin failed, please try again.",
       });
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -87,7 +87,7 @@ export default function LoginPage() {
                     ></path>
                   </svg>
                 </div>
-                {loading?"Proccessing...":"Google"}
+                {loading ? "Proccessing..." : "Google"}
               </Button>
             </div>
           </div>

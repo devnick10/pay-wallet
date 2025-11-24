@@ -20,18 +20,21 @@ import {
 } from "@/components/ui/table";
 import { toast } from "@/hooks/use-toast";
 import {
-  setamount,
   useBalance,
-  setlockedamout,
   usePayouts,
+  useAppDispatch,
+} from "@repo/store/merchantHooks";
+import {
+  setamount,
+  setlockedamout,
   setPayouts,
-} from "@repo/store/merchant";
-import { useDispatch } from "@repo/store/utils";
+} from "@repo/store/merchantReducers";
+
 import { Calendar, Download, Wallet } from "lucide-react";
 import { useEffect } from "react";
 
 export default function PayoutsPage() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { locked, amount } = useBalance();
   const { payouts } = usePayouts();
 

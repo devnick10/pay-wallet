@@ -10,8 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { addPayout, setlockedamout } from "@repo/store/merchant";
-import { useDispatch } from "@repo/store/utils";
+import { addPayout, setlockedamout } from "@repo/store/merchantReducers";
+import { useAppDispatch } from "@repo/store/merchantHooks";
 import { ChangeEvent, useState } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -36,7 +36,7 @@ export const PayoutCard = () => {
   const [amount, setAmount] = useState<number>();
   const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handlePayout = async () => {
     if (!amount || !provider) return;
