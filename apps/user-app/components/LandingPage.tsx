@@ -21,12 +21,12 @@ export default function LandingPage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-          <div className="w-full  px-4 md:px-6">
-            <div className="flex sm:flex-row items-center justify-center flex-col gap-4 md:gap-8 lg:gap-12 xl:grid-cols-2">
-              <div className="flex flex-col justify-center space-y-4">
+            <div className="max-w-6xl mx-auto flex sm:flex-row items-center justify-between flex-col gap-4 md:gap-8 lg:gap-12 xl:grid-cols-2">
+              {/* right section */}
+              <div className="flex flex-col justify-center space-y-4 px-4 sm:px-0">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    The Simplest Way to Send & Receive Money
+                    The Simplest Way to <br/> Send & Receive Money
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
                     Fast, secure, and convenient. PayWallet makes managing your
@@ -46,6 +46,7 @@ export default function LandingPage() {
                   </Link>
                 </div>
               </div>
+              {/* left section */}
               <div className="flex items-center justify-center">
                 <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg">
                   <div className=" overflow-hidden rounded-xl border bg-background shadow-xl">
@@ -119,7 +120,6 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-          </div>
         </section>
 
         {/* Features Section */}
