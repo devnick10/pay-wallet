@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 
 export default function SendCard() {
   const [number, setNumber] = useState("");
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -27,11 +27,15 @@ export default function SendCard() {
 
     setIsLoading(true);
     try {
-      const { success, p2p, message } = await p2pTransfer(number, amount * 100);
+      const numericAmount = Number(amount)
+      const { success, p2p, message } = await p2pTransfer(
+        number,
+        numericAmount * 100
+      );
       if (success && p2p) {
         dispatch(addP2pTransaction(p2p));
         setNumber("");
-        setAmount(0);
+        setAmount("");
         toast.success(message);
         return;
       }
@@ -55,10 +59,17 @@ export default function SendCard() {
           <Label htmlFor="number">Recipient Phone Number</Label>
           <Input
             id="number"
-            type="tel"
+            type="text"
+            inputMode="numeric"
             placeholder="Enter phone number"
+            minLength={10}
+            maxLength={12}
             value={number}
-            onChange={(e) => setNumber(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, "");
+              setNumber(val)
+            }
+            }
           />
         </div>
 
@@ -66,10 +77,14 @@ export default function SendCard() {
           <Label htmlFor="amount">Amount (₹)</Label>
           <Input
             id="amount"
-            type="number"
+            type="text"
+            inputMode="numeric"
             placeholder="Enter amount"
             value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, "");
+              setAmount(val);
+            }}
           />
         </div>
 
@@ -78,7 +93,7 @@ export default function SendCard() {
             <Button
               key={value}
               variant="outline"
-              onClick={() => setAmount(value)}
+              onClick={() => setAmount(String(value))}
               className="flex-1"
             >
               ₹{value}

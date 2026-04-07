@@ -38,7 +38,7 @@ export const AddMoney = () => {
   const [redirectUrl, setRedirectUrl] = useState(
     SUPPORTED_BANKS[0]?.redirectUrl,
   );
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<string>("");
   const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,8 +48,9 @@ export const AddMoney = () => {
 
     setIsLoading(true);
     try {
+      const numericAmount = Number(amount);
       const { success, onRampTxns, balance } = await createOnRampTransaction(
-        amount,
+        numericAmount,
         provider,
       );
       if (success && onRampTxns && balance) {
@@ -77,11 +78,15 @@ export const AddMoney = () => {
           <Label htmlFor="amount">Amount (₹)</Label>
           <Input
             id="amount"
-            type="number"
+            type="text"
             placeholder="Enter amount"
+            minLength={10}
+            maxLength={12}
             value={amount}
+            inputMode="numeric"
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setAmount(Number(e.target.value));
+              const val = e.target.value.replace(/\D/g, "");
+              setAmount(val);
             }}
           />
         </div>
@@ -90,7 +95,7 @@ export const AddMoney = () => {
             <Button
               key={value}
               variant="outline"
-              onClick={() => setAmount(value)}
+              onClick={() => setAmount(String(value))}
               className="flex-1"
             >
               ₹{value}
