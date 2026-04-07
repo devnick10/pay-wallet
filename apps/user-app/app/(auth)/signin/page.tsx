@@ -20,11 +20,15 @@ export default function LoginPage() {
   const router = useRouter();
 
   async function handleSignin() {
-    const { data, success, error } = signInSchema.safeParse({ name,  phone:phoneNumber, password });
+    const { data, success, error } = signInSchema.safeParse({
+      name,
+      phone: phoneNumber,
+      password,
+    });
     if (!success) {
-      error.issues.reverse().map((m) => (
-        toast.error(m.message || "Validation failed")
-      ))
+      error.issues
+        .reverse()
+        .map((m) => toast.error(m.message || "Validation failed"));
       return null;
     }
 
@@ -112,7 +116,7 @@ export default function LoginPage() {
                 inputMode="numeric"
                 onChange={(e) => {
                   const val = e.target.value.replace(/\D/g, "");
-                  setPhoneNumber(val)
+                  setPhoneNumber(val);
                 }}
                 required
               />

@@ -21,97 +21,96 @@ export default function LandingPage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-            <div className="max-w-6xl mx-auto flex sm:flex-row items-center justify-between flex-col gap-4 md:gap-8 lg:gap-12 xl:grid-cols-2">
-              {/* right section */}
-              <div className="flex flex-col justify-center space-y-4 px-4 sm:px-0">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    The Simplest Way to <br/> Send & Receive Money
-                  </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    Fast, secure, and convenient. PayWallet makes managing your
-                    money easier than ever.
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link href="/signin">
-                    <Button size="lg" className="gap-1">
-                      Get Started <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Link href="#features">
-                    <Button size="lg" variant="outline">
-                      Learn More
-                    </Button>
-                  </Link>
-                </div>
+          <div className="max-w-6xl mx-auto flex sm:flex-row items-center justify-between flex-col gap-4 md:gap-8 lg:gap-12 xl:grid-cols-2">
+            {/* right section */}
+            <div className="flex flex-col justify-center space-y-4 px-4 sm:px-0">
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                  The Simplest Way to <br /> Send & Receive Money
+                </h1>
+                <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                  Fast, secure, and convenient. PayWallet makes managing your
+                  money easier than ever.
+                </p>
               </div>
-              {/* left section */}
-              <div className="flex items-center justify-center">
-                <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg">
-                  <div className=" overflow-hidden rounded-xl border bg-background shadow-xl">
-                    <div className="p-6">
-                      <div className="space-y-2">
-                        <h3 className="text-xl font-bold">Your Wallet</h3>
-                        <div className="text-3xl font-bold">₹24,500.00</div>
-                        <p className="text-xs text-muted-foreground">
-                          Available Balance
-                        </p>
+              <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                <Link href="/signin">
+                  <Button size="lg" className="gap-1">
+                    Get Started <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="#features">
+                  <Button size="lg" variant="outline">
+                    Learn More
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            {/* left section */}
+            <div className="flex items-center justify-center">
+              <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg">
+                <div className=" overflow-hidden rounded-xl border bg-background shadow-xl">
+                  <div className="p-6">
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-bold">Your Wallet</h3>
+                      <div className="text-3xl font-bold">₹24,500.00</div>
+                      <p className="text-xs text-muted-foreground">
+                        Available Balance
+                      </p>
+                    </div>
+                    <div className="mt-6 grid grid-cols-2 gap-4">
+                      <div className="rounded-lg bg-primary/10 p-4 text-center">
+                        <Send className="mx-auto h-6 w-6 text-primary" />
+                        <div className="mt-2 text-sm font-medium">
+                          Send Money
+                        </div>
                       </div>
-                      <div className="mt-6 grid grid-cols-2 gap-4">
-                        <div className="rounded-lg bg-primary/10 p-4 text-center">
-                          <Send className="mx-auto h-6 w-6 text-primary" />
-                          <div className="mt-2 text-sm font-medium">
-                            Send Money
-                          </div>
-                        </div>
-                        <div className="rounded-lg bg-primary/10 p-4 text-center">
-                          <CreditCard className="mx-auto h-6 w-6 text-primary" />
-                          <div className="mt-2 text-sm font-medium">
-                            Add Money
-                          </div>
+                      <div className="rounded-lg bg-primary/10 p-4 text-center">
+                        <CreditCard className="mx-auto h-6 w-6 text-primary" />
+                        <div className="mt-2 text-sm font-medium">
+                          Add Money
                         </div>
                       </div>
-                      <div className="mt-6">
-                        <div className="text-sm font-medium">
-                          Recent Transactions
-                        </div>
-                        <div className="mt-2 space-y-2">
-                          <div className="flex items-center justify-between rounded-lg border p-2">
-                            <div className="flex items-center gap-2">
-                              <div className="rounded-full bg-green-100 p-1 dark:bg-green-900">
-                                <ArrowRight className="h-4 w-4 text-green-600 dark:text-green-400" />
-                              </div>
-                              <div>
-                                <div className="text-sm font-medium">
-                                  Received from Rahul
-                                </div>
-                                <div className="text-xs text-muted-foreground">
-                                  Today, 2:34 PM
-                                </div>
-                              </div>
+                    </div>
+                    <div className="mt-6">
+                      <div className="text-sm font-medium">
+                        Recent Transactions
+                      </div>
+                      <div className="mt-2 space-y-2">
+                        <div className="flex items-center justify-between rounded-lg border p-2">
+                          <div className="flex items-center gap-2">
+                            <div className="rounded-full bg-green-100 p-1 dark:bg-green-900">
+                              <ArrowRight className="h-4 w-4 text-green-600 dark:text-green-400" />
                             </div>
-                            <div className="text-sm font-medium text-green-600 dark:text-green-400">
-                              +₹500
+                            <div>
+                              <div className="text-sm font-medium">
+                                Received from Rahul
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                Today, 2:34 PM
+                              </div>
                             </div>
                           </div>
-                          <div className="flex items-center justify-between rounded-lg border p-2">
-                            <div className="flex items-center gap-2">
-                              <div className="rounded-full bg-red-100 p-1 dark:bg-red-900">
-                                <ArrowRight className="h-4 w-4 rotate-180 text-red-600 dark:text-red-400" />
+                          <div className="text-sm font-medium text-green-600 dark:text-green-400">
+                            +₹500
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between rounded-lg border p-2">
+                          <div className="flex items-center gap-2">
+                            <div className="rounded-full bg-red-100 p-1 dark:bg-red-900">
+                              <ArrowRight className="h-4 w-4 rotate-180 text-red-600 dark:text-red-400" />
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium">
+                                Sent to Priya
                               </div>
-                              <div>
-                                <div className="text-sm font-medium">
-                                  Sent to Priya
-                                </div>
-                                <div className="text-xs text-muted-foreground">
-                                  Yesterday, 7:15 PM
-                                </div>
+                              <div className="text-xs text-muted-foreground">
+                                Yesterday, 7:15 PM
                               </div>
                             </div>
-                            <div className="text-sm font-medium text-red-600 dark:text-red-400">
-                              -₹1,200
-                            </div>
+                          </div>
+                          <div className="text-sm font-medium text-red-600 dark:text-red-400">
+                            -₹1,200
                           </div>
                         </div>
                       </div>
@@ -120,6 +119,7 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
+          </div>
         </section>
 
         {/* Features Section */}

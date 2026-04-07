@@ -20,7 +20,11 @@ import {
   setlockedamout,
   setP2pTransactions,
 } from "@repo/store/userReducers";
-import { useBalance, useP2pTransactions, useAppDispatch } from "@repo/store/userHooks";
+import {
+  useBalance,
+  useP2pTransactions,
+  useAppDispatch,
+} from "@repo/store/userHooks";
 
 export default function DashboardPage() {
   const session = useSession();
@@ -51,7 +55,7 @@ export default function DashboardPage() {
         .filter((txn) => txn.fromUser.id !== Number(session?.data?.user.id))
         .reduce((sum, txn) => sum + txn.amount, 0) / 100;
     return { totalSent, totalRecvied };
-  }, [transactions,session]);
+  }, [transactions, session]);
 
   if (!session?.data?.user || !session?.data?.user.email) return;
   return (

@@ -1,7 +1,9 @@
 import z from "zod";
 
 const signInSchema = z.object({
-  name: z.string({ message: "Name is required" }).min(3, { message: "Name should be least 4 character" }),
+  name: z
+    .string({ message: "Name is required" })
+    .min(3, { message: "Name should be least 4 character" }),
   phone: z
     .string({ message: "Phone number is required" })
     .min(10, { message: "Invalied length on number" })
@@ -31,7 +33,10 @@ const p2pTransferSchema = z.object({
   amount: z.number({ message: "Amount is required" }),
 });
 
-
 export type CredentialsType = z.infer<typeof signInSchema>;
-export { onRampTransactionSchema, onRampValidationSchema, p2pTransferSchema, signInSchema };
-
+export {
+  onRampTransactionSchema,
+  onRampValidationSchema,
+  p2pTransferSchema,
+  signInSchema,
+};

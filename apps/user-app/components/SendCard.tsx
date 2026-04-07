@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { addP2pTransaction } from "@repo/store/userReducers";
+import { p2pTransferSchema } from "@repo/common/common";
 import { useAppDispatch } from "@repo/store/userHooks";
+import { addP2pTransaction } from "@repo/store/userReducers";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { p2pTransferSchema } from "@repo/common/common";
 
 export default function SendCard() {
   const [number, setNumber] = useState("");
@@ -24,17 +24,17 @@ export default function SendCard() {
   const dispatch = useAppDispatch();
 
   const handleSendMoney = async () => {
-    const numericAmount = Number(amount)
+    const numericAmount = Number(amount);
 
     const { data, success, error } = p2pTransferSchema.safeParse({
       amount: numericAmount,
-      phone: Number(number)
+      phone: Number(number),
     });
 
     if (!success) {
-      error.issues.reverse().map((m) => (
-        toast.error(m.message || "Validation failed")
-      ))
+      error.issues
+        .reverse()
+        .map((m) => toast.error(m.message || "Validation failed"));
       return null;
     }
 
@@ -42,7 +42,7 @@ export default function SendCard() {
     try {
       const { success, p2p, message } = await p2pTransfer(
         data.phone,
-        numericAmount 
+        numericAmount,
       );
       if (success && p2p) {
         dispatch(addP2pTransaction(p2p));
@@ -79,9 +79,8 @@ export default function SendCard() {
             value={number}
             onChange={(e) => {
               const val = e.target.value.replace(/\D/g, "");
-              setNumber(val)
-            }
-            }
+              setNumber(val);
+            }}
           />
         </div>
 

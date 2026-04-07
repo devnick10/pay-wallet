@@ -48,13 +48,13 @@ export const AddMoney = () => {
     const numericAmount = Number(amount);
     const { data, success, error } = onRampTransactionSchema.safeParse({
       amount: numericAmount,
-      provider
+      provider,
     });
 
     if (!success) {
-      error.issues.reverse().map((m) => (
-        toast.error(m.message || "Validation failed")
-      ))
+      error.issues
+        .reverse()
+        .map((m) => toast.error(m.message || "Validation failed"));
       return null;
     }
 

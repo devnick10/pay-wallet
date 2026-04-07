@@ -7,7 +7,7 @@ import prisma from "@repo/db/client";
 export async function p2pTransfer(to: number, amount: number) {
   const session = await getServerSession(authOptions);
   const sender = session?.user;
-  const amountInINR= amount * 100 
+  const amountInINR = amount * 100;
   if (!sender?.id) {
     return {
       success: false,
@@ -52,14 +52,14 @@ export async function p2pTransfer(to: number, amount: number) {
       if (toUser) {
         await txn.balance.update({
           where: { userId: toUser.id },
-          data: { amount: { increment: amountInINR} },
+          data: { amount: { increment: amountInINR } },
         });
 
         const p2p = await txn.p2PTransfer.create({
           data: {
             fromUserId: Number(sender.id),
             toUserId: toUser.id,
-            amount:amountInINR,
+            amount: amountInINR,
             timestamp: new Date(),
           },
         });
@@ -89,7 +89,7 @@ export async function p2pTransfer(to: number, amount: number) {
           data: {
             fromUserId: Number(sender.id),
             toMerchantId: toMerchant.id,
-            amount:amountInINR,
+            amount: amountInINR,
             timestamp: new Date(),
           },
         });
