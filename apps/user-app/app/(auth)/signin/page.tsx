@@ -99,10 +99,16 @@ export default function LoginPage() {
               <Label htmlFor="phone">Phone Number</Label>
               <Input
                 id="phone"
-                type="tel"
+                type="text"
                 placeholder="Enter your phone number"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                minLength={10}
+                maxLength={12}
+                inputMode="numeric"
+                onChange={(e) => {
+                  const val = e.target.value.replace(/\D/g, "");
+                  setPhoneNumber(val)
+                }}
                 required
               />
             </div>
