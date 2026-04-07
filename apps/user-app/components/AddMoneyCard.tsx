@@ -1,4 +1,5 @@
 "use client";
+import { createOnRampTransaction } from "@/actions/onRampTransaction";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,9 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { onRampTransactionSchema } from "@repo/common/common";
+import { useAppDispatch } from "@repo/store/userHooks";
+import { addOnRampTxns } from "@repo/store/userReducers";
 import { ChangeEvent, useState } from "react";
-import { Label } from "./ui/label";
+import toast from "react-hot-toast";
 import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 import {
   Select,
   SelectContent,
@@ -18,10 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { createOnRampTransaction } from "@/actions/onRampTransaction";
-import toast from "react-hot-toast";
-import { useAppDispatch } from "@repo/store/userHooks";
-import { addOnRampTxns } from "@repo/store/userReducers";
 
 const SUPPORTED_BANKS = [
   {
@@ -44,14 +45,24 @@ export const AddMoney = () => {
 
   const dispatch = useAppDispatch();
   const handleAddMoney = async () => {
-    if (!amount || !provider) return;
+    const numericAmount = Number(amount);
+    const { data, success, error } = onRampTransactionSchema.safeParse({
+      amount: numericAmount,
+      provider
+    });
+
+    if (!success) {
+      error.issues.reverse().map((m) => (
+        toast.error(m.message || "Validation failed")
+      ))
+      return null;
+    }
 
     setIsLoading(true);
     try {
-      const numericAmount = Number(amount);
       const { success, onRampTxns, balance } = await createOnRampTransaction(
-        numericAmount,
-        provider,
+        data.amount,
+        data.provider,
       );
       if (success && onRampTxns && balance) {
         dispatch(addOnRampTxns(onRampTxns));

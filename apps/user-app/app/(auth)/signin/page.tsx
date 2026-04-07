@@ -3,6 +3,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signInSchema } from "@repo/common/common";
 import { ArrowLeft, CreditCard, Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
@@ -19,18 +20,22 @@ export default function LoginPage() {
   const router = useRouter();
 
   async function handleSignin() {
-    if (!name.trim() || !phoneNumber.trim() || !password.trim()) {
-      toast.error("Please provide all fields");
-      return;
+    const { data, success, error } = signInSchema.safeParse({ name,  phone:phoneNumber, password });
+    if (!success) {
+      error.issues.reverse().map((m) => (
+        toast.error(m.message || "Validation failed")
+      ))
+      return null;
     }
 
     try {
       setLoading(true);
+
       const result = await signIn("credentials", {
         redirect: false,
-        name,
-        phone: phoneNumber,
-        password,
+        name: data.name,
+        phone: data.phone,
+        password: data.password,
         callbackUrl: "/dashboard",
       });
 
